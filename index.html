@@ -1,0 +1,1282 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
+    <meta name="theme-color" content="#030712">
+    <title>王隆粮 · 文博×AI交叉领域探索者</title>
+
+    <!-- Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', '"PingFang SC"', '"Microsoft YaHei"', 'sans-serif'],
+                    },
+                },
+            },
+        };
+    </script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        html {
+            scroll-behavior: smooth;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+        body {
+            background-color: #030712;
+            color: #e2e8f0;
+            overflow-x: hidden;
+            font-feature-settings: 'tnum';
+        }
+
+        /* ===== 背景光斑 ===== */
+        .glow {
+            position: fixed;
+            border-radius: 9999px;
+            filter: blur(140px);
+            pointer-events: none;
+            z-index: -1;
+        }
+        .glow-cyan {
+            width: 620px;
+            height: 620px;
+            top: -180px;
+            left: -180px;
+            background: radial-gradient(circle, rgba(34, 211, 238, 0.16), transparent 70%);
+        }
+        .glow-indigo {
+            width: 640px;
+            height: 640px;
+            bottom: -200px;
+            right: -200px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.16), transparent 70%);
+        }
+        .grid-bg {
+            position: fixed;
+            inset: 0;
+            z-index: -2;
+            pointer-events: none;
+            background-image:
+                linear-gradient(rgba(148, 163, 184, 0.045) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(148, 163, 184, 0.045) 1px, transparent 1px);
+            background-size: 64px 64px;
+            mask-image: radial-gradient(ellipse 80% 55% at 50% 0%, #000 30%, transparent 75%);
+            -webkit-mask-image: radial-gradient(ellipse 80% 55% at 50% 0%, #000 30%, transparent 75%);
+        }
+
+        /* ===== 毛玻璃卡片 ===== */
+        .glass {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(24px) saturate(1.3);
+            -webkit-backdrop-filter: blur(24px) saturate(1.3);
+            border: 1px solid rgba(255, 255, 255, 0.10);
+            border-radius: 1rem;
+            transition: transform .3s cubic-bezier(.4, 0, .2, 1), border-color .3s ease, box-shadow .3s ease;
+        }
+
+        /* 指标卡：青色微发光 + 上浮 */
+        .metric:hover {
+            transform: translateY(-4px);
+            border-color: rgba(34, 211, 238, 0.35);
+            box-shadow: 0 0 0 1px rgba(34, 211, 238, 0.12), 0 12px 40px -12px rgba(34, 211, 238, 0.35);
+        }
+        .metric:hover .metric-num {
+            filter: drop-shadow(0 0 12px rgba(34, 211, 238, 0.45));
+        }
+
+        /* 普通卡片 hover */
+        .glass-hover:hover {
+            border-color: rgba(255, 255, 255, 0.22);
+            box-shadow: 0 18px 50px -20px rgba(34, 211, 238, 0.25);
+        }
+
+        /* ===== 渐变数字 ===== */
+        .grad-num {
+            background-image: linear-gradient(135deg, #67e8f9 0%, #818cf8 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            -webkit-text-fill-color: transparent;
+            transition: filter .3s ease;
+        }
+
+        /* ===== 技术栈胶囊 ===== */
+        .tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 3px 11px;
+            border-radius: 9999px;
+            font-size: 12px;
+            font-weight: 500;
+            line-height: 1.4;
+            background: rgba(6, 182, 212, 0.10);
+            border: 1px solid rgba(6, 182, 212, 0.20);
+            color: #67e8f9;
+            transition: background .25s ease, border-color .25s ease;
+            white-space: nowrap;
+        }
+        .tag:hover {
+            background: rgba(6, 182, 212, 0.18);
+            border-color: rgba(6, 182, 212, 0.4);
+        }
+
+        /* ===== 时间轴 ===== */
+        .timeline {
+            position: relative;
+            margin-left: 4px;
+            padding-left: 28px;
+            border-left: 1px solid rgba(148, 163, 184, 0.18);
+        }
+        .timeline-dot {
+            position: absolute;
+            left: -31px;
+            top: 6px;
+            width: 7px;
+            height: 7px;
+            border-radius: 9999px;
+            background: #22d3ee;
+            box-shadow: 0 0 0 4px rgba(34, 211, 238, 0.12), 0 0 12px rgba(34, 211, 238, 0.6);
+        }
+
+        /* ===== 状态指示灯 ===== */
+        .dot-ping {
+            position: relative;
+            width: 7px;
+            height: 7px;
+            border-radius: 9999px;
+            background: #22d3ee;
+            box-shadow: 0 0 10px rgba(34, 211, 238, 0.8);
+        }
+        .dot-ping::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 9999px;
+            background: #22d3ee;
+            animation: ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+        }
+        @keyframes ping {
+            0% { transform: scale(1); opacity: 0.6; }
+            75%, 100% { transform: scale(3.2); opacity: 0; }
+        }
+
+        /* ===== 技能条 ===== */
+        .bar-track {
+            height: 5px;
+            border-radius: 9999px;
+            background: rgba(148, 163, 184, 0.14);
+            overflow: hidden;
+        }
+        .bar-fill {
+            height: 100%;
+            border-radius: 9999px;
+            background: linear-gradient(90deg, #22d3ee 0%, #6366f1 100%);
+            width: 0%;
+            transition: width .9s cubic-bezier(.4, 0, .2, 1);
+            box-shadow: 0 0 10px rgba(34, 211, 238, 0.4);
+        }
+
+        /* ===== 按钮辉光 ===== */
+        .btn {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 9px 16px;
+            border-radius: 0.75rem;
+            font-size: 14px;
+            font-weight: 600;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            background: rgba(255, 255, 255, 0.04);
+            color: #e2e8f0;
+            cursor: pointer;
+            transition: all .28s cubic-bezier(.4, 0, .2, 1);
+            overflow: hidden;
+        }
+        .btn:hover {
+            border-color: rgba(34, 211, 238, 0.45);
+            background: rgba(34, 211, 238, 0.10);
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 0 24px -4px rgba(34, 211, 238, 0.55);
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, rgba(34, 211, 238, 0.18), rgba(99, 102, 241, 0.18));
+            border-color: rgba(34, 211, 238, 0.35);
+            color: #fff;
+        }
+        .btn-primary:hover {
+            background: linear-gradient(135deg, rgba(34, 211, 238, 0.3), rgba(99, 102, 241, 0.3));
+            box-shadow: 0 0 28px -4px rgba(34, 211, 238, 0.7);
+        }
+        .btn:active { transform: translateY(0); }
+
+        /* ===== 标题装饰线 ===== */
+        .accent-line {
+            width: 28px;
+            height: 2px;
+            border-radius: 9999px;
+            background: linear-gradient(90deg, #22d3ee, rgba(99, 102, 241, 0.2));
+        }
+
+        /* ===== 入屏淡入 ===== */
+        .reveal {
+            opacity: 0;
+            transform: translateY(14px);
+            transition: opacity .65s cubic-bezier(.4, 0, .2, 1), transform .65s cubic-bezier(.4, 0, .2, 1);
+        }
+        /* 直接置为可见态，不依赖动画完成，避免动画被禁用时内容不可见 */
+        .reveal.is-visible { opacity: 1; transform: translateY(0); }
+
+        /* ===== Toast ===== */
+        #toast {
+            transition: opacity .28s ease, transform .28s ease, visibility .28s;
+        }
+
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #030712; }
+        ::-webkit-scrollbar-thumb { background: rgba(148, 163, 184, 0.25); border-radius: 12px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(34, 211, 238, 0.45); }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+            html { scroll-behavior: auto; }
+        }
+
+        /* ===== 触摸与移动端优化 ===== */
+        a, button { -webkit-tap-highlight-color: transparent; }
+        body { touch-action: manipulation; }
+        img { background-color: rgba(255, 255, 255, 0.03); }
+        .btn { min-height: 44px; }
+        .no-print > .btn, .no-print .btn { min-height: 44px; }
+
+        /* 小屏：降低模糊半径与光斑开销，保证滚动流畅 */
+        @media (max-width: 640px) {
+            .glass {
+                backdrop-filter: blur(12px) saturate(1.15);
+                -webkit-backdrop-filter: blur(12px) saturate(1.15);
+            }
+            .glow { filter: blur(70px); }
+            .reveal.is-visible { transition-duration: .45s; }
+        }
+
+        /* 刘海屏安全区域 */
+        @supports (padding: env(safe-area-inset-bottom)) {
+            main { padding-left: max(1.25rem, env(safe-area-inset-left)); padding-right: max(1.25rem, env(safe-area-inset-right)); }
+            #toast { bottom: calc(2rem + env(safe-area-inset-bottom)); }
+        }
+
+        /* ===== 打印 / 导出 PDF（移动端友好：单列窄版排版） ===== */
+        @page {
+            size: A4;
+            margin: 12mm 10mm;
+        }
+        @media print {
+            /* 关键：入屏淡入元素在打印时必须全部可见，否则 PDF 会出现空白 */
+            .reveal {
+                opacity: 1 !important;
+                transform: none !important;
+                transition: none !important;
+            }
+
+            body { background: #fff !important; color: #111 !important; }
+            .no-print, .glow, .grid-bg { display: none !important; }
+            main { max-width: none !important; padding: 0 !important; }
+
+            .glass {
+                background: #fff !important;
+                border: 1px solid #ddd !important;
+                backdrop-filter: none !important;
+                box-shadow: none !important;
+                transform: none !important;
+                break-inside: avoid;
+                page-break-inside: avoid;
+            }
+            section { margin-top: 18px !important; }
+
+            /* 文字转深色，保证白底可读 */
+            .text-white, h1, h2, h3, h4, h5 { color: #0f172a !important; }
+            .text-slate-300, .text-slate-400, .text-slate-500,
+            .text-slate-600, .text-slate-700 { color: #334155 !important; }
+            .text-cyan-400, .text-cyan-300 { color: #0e7490 !important; }
+            .border-white\/10 { border-color: #e2e8f0 !important; }
+            .bg-white\/\[0\.03\] { background: #fff !important; }
+
+            .grad-num { background: none !important; color: #0e7490 !important; -webkit-text-fill-color: #0e7490 !important; }
+            .tag { background: #f1f5f9 !important; border-color: #e2e8f0 !important; color: #334155 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .bar-fill { background: #0e7490 !important; box-shadow: none !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .timeline-dot { background: #0e7490 !important; box-shadow: none !important; }
+            .dot-ping::after { animation: none !important; }
+
+            /* 手机阅读友好：多列网格在 PDF 中一律降为单列 */
+            #experienceFlow, #projectsGrid, #skillsGrid, #educationList,
+            #lifeVideo, #featuredWork .grid {
+                grid-template-columns: 1fr !important;
+                display: block !important;
+            }
+            /* 指标看板保留两列，紧凑且不占过多纵向空间 */
+            #highlightsGrid { grid-template-columns: repeat(2, 1fr) !important; gap: 6px !important; }
+
+            /* 生活照在纸质版中两列排布并限制高度，避免单张占满整页；
+               用 contain 而非 cover，保证不裁掉画面主体 */
+            #lifeGrid { columns: 2 !important; column-gap: 8px !important; }
+            #lifeGrid figure img, #hobbiesGrid img {
+                aspect-ratio: auto !important;
+                width: auto !important;
+                max-width: 100% !important;
+                max-height: 58mm !important;
+                display: block !important;
+                margin: 0 auto !important;
+                object-fit: contain !important;
+            }
+            /* 证书需完整可辨，保持原比例整页宽度 */
+            #educationList img {
+                max-height: 92mm !important;
+                object-fit: contain !important;
+            }
+
+            /* 视频在纸质版中无法播放，改为打印来源说明 */
+            video { display: none !important; }
+            .print-only { display: block !important; }
+            #featuredWork a[href^="http"] {
+                color: #0e7490 !important;
+                word-break: break-all;
+            }
+
+            /* 分页保护 */
+            #lifeGrid figure, #lifeIntro, #lifeVideo > div,
+            #hobbiesGrid > div, #educationList > div, #experienceFlow > div,
+            #projectsGrid > div, #skillsGrid > div { break-inside: avoid; page-break-inside: avoid; }
+            #hobbiesGrid img { break-inside: avoid; }
+            #lifeGrid figure { margin-bottom: 10px !important; }
+        }
+        .print-only { display: none; }
+    </style>
+</head>
+<body class="min-h-screen font-sans">
+
+    <!-- 背景 -->
+    <div class="grid-bg" aria-hidden="true"></div>
+    <div class="glow glow-cyan" aria-hidden="true"></div>
+    <div class="glow glow-indigo" aria-hidden="true"></div>
+
+    <!-- Toast -->
+    <div id="toast" role="alert"
+         class="no-print fixed bottom-8 left-1/2 z-[9999] -translate-x-1/2 translate-y-3 rounded-xl border border-white/15 bg-slate-900/70 px-5 py-3 text-sm font-medium text-white shadow-2xl backdrop-blur-xl opacity-0 invisible whitespace-nowrap">
+    </div>
+
+    <!-- 证书放大查看 -->
+    <div id="lightbox" role="dialog" aria-modal="true" aria-label="证书大图"
+         class="no-print invisible fixed inset-0 z-[9998] flex flex-col items-center justify-center gap-4 bg-slate-950/90 p-4 opacity-0 backdrop-blur-md transition-opacity duration-300 sm:p-8">
+        <div class="flex w-full max-w-6xl items-center justify-between gap-4">
+            <h3 id="lightboxTitle" class="truncate text-sm font-semibold text-white sm:text-base"></h3>
+            <button id="lightboxClose" type="button" aria-label="关闭"
+                    class="flex h-11 w-11 flex-none items-center justify-center rounded-xl border border-white/15 bg-white/5 text-slate-300 transition hover:border-cyan-500/40 hover:text-white">
+                <i data-lucide="x" class="h-5 w-5"></i>
+            </button>
+        </div>
+        <img id="lightboxImg" src="" alt=""
+             class="max-h-[78vh] w-auto max-w-full rounded-xl border border-white/15 bg-white object-contain shadow-2xl">
+        <p class="text-center text-xs text-slate-400">点击空白处或按 Esc 关闭</p>
+    </div>
+
+    <main class="mx-auto max-w-5xl px-5 py-14 sm:px-8 md:py-20">
+
+        <!-- ===== 头部 ===== -->
+        <header class="glass reveal p-6 sm:p-8 md:p-10">
+            <div class="flex flex-col gap-6 sm:flex-row sm:items-center">
+                <img src="头像.jpg" alt="王隆粮头像" loading="lazy" decoding="async"
+                     class="h-20 w-20 flex-none rounded-2xl object-cover ring-1 ring-white/15 sm:h-24 sm:w-24">
+
+                <div class="min-w-0 flex-1">
+                    <div class="inline-flex items-center gap-2 rounded-full border border-cyan-500/25 bg-cyan-500/10 px-3 py-1 text-xs font-medium text-cyan-300">
+                        <span class="dot-ping"></span>
+                        开放合作 · 终身学习
+                    </div>
+                    <h1 class="mt-3 text-3xl font-extrabold tracking-tight text-white sm:text-4xl">王隆粮</h1>
+                    <p class="mt-1.5 flex items-center gap-2 text-base font-semibold text-cyan-400">
+                        <i data-lucide="sparkles" class="h-4 w-4"></i>文博 × AI 交叉领域探索者
+                    </p>
+                </div>
+            </div>
+
+            <p class="mt-6 max-w-3xl text-[15px] leading-7 text-slate-300">
+                虚怀若谷，格物致知。坚信知识具有复利效应，致力于将人工智能与文物博物馆学深度融合，
+                探索数字化保护与智能化的新路径。
+            </p>
+
+            <div id="heroTags" class="mt-5 flex flex-wrap gap-2"></div>
+
+            <div class="no-print mt-7 flex flex-wrap gap-3">
+                <button data-copy="email" class="btn btn-primary">
+                    <i data-lucide="mail" class="h-4 w-4"></i> 复制邮箱
+                </button>
+                <button data-copy="wechat" class="btn">
+                    <i data-lucide="message-circle" class="h-4 w-4"></i> 微信：wangll17170
+                </button>
+                <button data-copy="phone" class="btn">
+                    <i data-lucide="phone" class="h-4 w-4"></i> 191-1536-2214
+                </button>
+                <button id="printBtn" class="btn" title="打印 / 导出 PDF">
+                    <i data-lucide="printer" class="h-4 w-4"></i> 打印
+                </button>
+            </div>
+        </header>
+
+        <!-- ===== 亮点战绩 ===== -->
+        <section class="mt-14">
+            <div class="mb-6 flex items-center gap-3">
+                <span class="flex h-9 w-9 items-center justify-center rounded-xl border border-cyan-500/25 bg-cyan-500/10 text-cyan-300">
+                    <i data-lucide="bar-chart-3" class="h-4 w-4"></i>
+                </span>
+                <div>
+                    <h2 class="text-lg font-bold text-white">亮点战绩</h2>
+                    <p class="text-sm text-slate-400">可量化的成长与认证</p>
+                </div>
+                <span class="accent-line ml-auto hidden sm:block"></span>
+            </div>
+            <div id="highlightsGrid" class="grid grid-cols-2 gap-4 lg:grid-cols-4"></div>
+        </section>
+
+        <!-- ===== 个人作品 · 主打项目 ===== -->
+        <section id="works" class="mt-14">
+            <div class="mb-6 flex items-center gap-3">
+                <span class="flex h-9 w-9 items-center justify-center rounded-xl border border-indigo-500/25 bg-indigo-500/10 text-indigo-300">
+                    <i data-lucide="award" class="h-4 w-4"></i>
+                </span>
+                <div>
+                    <h2 class="text-lg font-bold text-white">个人作品</h2>
+                    <p class="text-sm text-slate-400">独立完成的交互式 Web 作品 · 已上线</p>
+                </div>
+                <span class="accent-line ml-auto hidden sm:block"></span>
+            </div>
+            <div id="featuredWork"></div>
+        </section>
+
+        <!-- ===== 经历 ===== -->
+        <section id="experience" class="mt-14">
+            <div class="mb-6 flex items-center gap-3">
+                <span class="flex h-9 w-9 items-center justify-center rounded-xl border border-cyan-500/25 bg-cyan-500/10 text-cyan-300">
+                    <i data-lucide="briefcase" class="h-4 w-4"></i>
+                </span>
+                <div>
+                    <h2 class="text-lg font-bold text-white">经历</h2>
+                    <p class="text-sm text-slate-400">学习 · 实践 · 探索</p>
+                </div>
+                <span class="accent-line ml-auto hidden sm:block"></span>
+            </div>
+            <div id="experienceFlow" class="grid grid-cols-1 gap-5 lg:grid-cols-3"></div>
+        </section>
+
+        <!-- ===== 项目 ===== -->
+        <section id="projects" class="mt-14">
+            <div class="mb-6 flex items-center gap-3">
+                <span class="flex h-9 w-9 items-center justify-center rounded-xl border border-cyan-500/25 bg-cyan-500/10 text-cyan-300">
+                    <i data-lucide="folder-git-2" class="h-4 w-4"></i>
+                </span>
+                <div>
+                    <h2 class="text-lg font-bold text-white">项目</h2>
+                    <p class="text-sm text-slate-400">个人实践与探索</p>
+                </div>
+                <span class="accent-line ml-auto hidden sm:block"></span>
+            </div>
+            <div id="projectsGrid" class="grid grid-cols-1 gap-5 md:grid-cols-2"></div>
+        </section>
+
+        <!-- ===== 技能 ===== -->
+        <section id="skills" class="mt-14">
+            <div class="mb-6 flex items-center gap-3">
+                <span class="flex h-9 w-9 items-center justify-center rounded-xl border border-cyan-500/25 bg-cyan-500/10 text-cyan-300">
+                    <i data-lucide="code-2" class="h-4 w-4"></i>
+                </span>
+                <div>
+                    <h2 class="text-lg font-bold text-white">技能矩阵</h2>
+                    <p class="text-sm text-slate-400">语言 · 工具 · 领域</p>
+                </div>
+                <span class="accent-line ml-auto hidden sm:block"></span>
+            </div>
+            <div id="skillsGrid" class="grid grid-cols-1 gap-5 md:grid-cols-2"></div>
+        </section>
+
+        <!-- ===== 教育 ===== -->
+        <section id="education" class="mt-14">
+            <div class="mb-6 flex items-center gap-3">
+                <span class="flex h-9 w-9 items-center justify-center rounded-xl border border-cyan-500/25 bg-cyan-500/10 text-cyan-300">
+                    <i data-lucide="graduation-cap" class="h-4 w-4"></i>
+                </span>
+                <div>
+                    <h2 class="text-lg font-bold text-white">教育与证书</h2>
+                    <p class="text-sm text-slate-400">学术背景与专业认证</p>
+                </div>
+                <span class="accent-line ml-auto hidden sm:block"></span>
+            </div>
+            <div id="educationList" class="grid grid-cols-1 gap-5 md:grid-cols-2"></div>
+        </section>
+
+        <!-- ===== 个人生活 ===== -->
+        <section id="life" class="mt-14">
+            <div class="mb-6 flex items-center gap-3">
+                <span class="flex h-9 w-9 flex-none items-center justify-center rounded-xl border border-cyan-500/25 bg-cyan-500/10 text-cyan-300">
+                    <i data-lucide="sun" class="h-4 w-4"></i>
+                </span>
+                <div>
+                    <h2 class="text-lg font-bold text-white">个人生活</h2>
+                    <p class="text-sm text-slate-400">工作之外的温度与好奇心</p>
+                </div>
+                <span class="accent-line ml-auto hidden sm:block"></span>
+            </div>
+            <div id="lifeIntro" class="mb-5"></div>
+            <div id="lifeVideo" class="mb-5"></div>
+            <div id="lifeGrid" class="columns-1 gap-5 sm:columns-2 lg:columns-3"></div>
+        </section>
+
+        <!-- ===== 个人爱好 ===== -->
+        <section id="hobbies" class="mt-14">
+            <div class="mb-6 flex items-center gap-3">
+                <span class="flex h-9 w-9 flex-none items-center justify-center rounded-xl border border-cyan-500/25 bg-cyan-500/10 text-cyan-300">
+                    <i data-lucide="gamepad-2" class="h-4 w-4"></i>
+                </span>
+                <div>
+                    <h2 class="text-lg font-bold text-white">个人爱好</h2>
+                    <p class="text-sm text-slate-400">工作之外坚持的小事</p>
+                </div>
+                <span class="accent-line ml-auto hidden sm:block"></span>
+            </div>
+            <div id="hobbiesGrid" class="space-y-5"></div>
+        </section>
+
+        <!-- ===== Footer ===== -->
+        <footer class="mt-16 border-t border-white/10 pt-8">
+            <div class="flex flex-col gap-4 text-sm text-slate-400 sm:flex-row sm:items-center sm:justify-between">
+                <div class="flex flex-wrap items-center gap-x-5 gap-y-2">
+                    <span class="inline-flex items-center gap-2"><i data-lucide="phone" class="h-4 w-4 text-cyan-400"></i> 191-1536-2214</span>
+                    <span class="inline-flex items-center gap-2"><i data-lucide="message-circle" class="h-4 w-4 text-cyan-400"></i> wangll17170</span>
+                    <span class="inline-flex min-w-0 items-center gap-2"><i data-lucide="mail" class="h-4 w-4 flex-none text-cyan-400"></i> <span id="emailDisplay" class="truncate">wanglongliang@outlook.com</span></span>
+                </div>
+                <p class="text-slate-500">&copy; 2026 王隆粮 · 构建于 <span id="buildDate"></span></p>
+            </div>
+        </footer>
+
+    </main>
+
+    <script>
+        (function() {
+            'use strict';
+
+            // ============================================================
+            // DATA
+            // ============================================================
+            const resume = {
+                name: '王隆粮',
+                title: '文博×AI交叉领域探索者',
+                tagline: '虚怀若谷，格物致知。坚信知识具有复利效应。',
+                tags: ['文物与博物馆学', '人工智能训练师', '知识管理', '数字化保护', '自我驱动'],
+                contact: {
+                    phone: '19115362214',
+                    phoneDisplay: '191-1536-2214',
+                    wechat: 'wangll17170',
+                    email: 'wanglongliang@outlook.com',
+                },
+                avatar: '头像.jpg',
+                /* ===== 个人作品：教师节礼物主题交互网站 ===== */
+                featured: {
+                    name: 'SUPERNOVA · 超新星行星',
+                    subtitle: '献给「百合老师」的教师节互动礼物',
+                    url: 'https://wanglongliang8.netlify.app/',
+                    video: '1.mp4',
+                    videoLabel: '作品演示视频 · 45 秒',
+                    concept: '把「祝福」翻译成宇宙尺度的视觉语言：星核在指尖被点燃，坍缩爆发为超新星，飞散的粒子重新聚合成一句句祝词——以星光的扩散隐喻师恩的传递。',
+                    tech: ['Three.js', 'GLSL 自定义着色器', 'MediaPipe HandLandmarker', 'WebGL 粒子系统', 'UnrealBloom 泛光后期', 'Afterimage 残影', 'Web Audio 生成式音频', '响应式布局', 'Netlify 部署'],
+                    stats: [{
+                        num: '6',
+                        label: '祝福段落',
+                        sub: '自动循环播放'
+                    }, {
+                        num: '3',
+                        label: '交互通道',
+                        sub: '鼠标 · 触屏 · 手势'
+                    }, {
+                        num: '45s',
+                        label: '演示视频',
+                        sub: '完整功能展示'
+                    }, {
+                        num: '100%',
+                        label: '独立开发',
+                        sub: '概念到上线'
+                    }]
+                },
+                highlights: [{
+                    number: '2',
+                    label: '达摩院AI认证',
+                    sub: '初级 · 高级（2026.07）'
+                }, {
+                    number: '4+',
+                    label: '技术领域探索',
+                    sub: 'AI训练 · 知识库 · PPT · 数字化'
+                }, {
+                    number: '∞',
+                    label: '知识复利信仰',
+                    sub: '持续学习 · 交叉创新'
+                }, {
+                    number: '2026',
+                    label: '准大一新生',
+                    sub: '新疆师范大学 · 文物与博物馆学'
+                }, ],
+                experience: [{
+                    id: 'edu',
+                    label: '学习经历',
+                    icon: 'graduation-cap',
+                    items: [{
+                        time: '2026 – 2030',
+                        title: '文物与博物馆学 本科',
+                        org: '新疆师范大学',
+                        desc: '系统学习文物学、博物馆学、考古学基础，关注数字化技术在文化遗产保护中的应用。',
+                        points: ['主修课程：文物学概论、博物馆学基础、考古学通论', '研究兴趣：数字化保护、智慧博物馆、文化遗产传播']
+                    }]
+                }, {
+                    id: 'cert',
+                    label: '认证培训',
+                    icon: 'award',
+                    items: [{
+                        time: '2026.07',
+                        title: '人工智能训练师（初级）',
+                        org: '达摩院 · 机器智能技术事业部',
+                        desc: '完成智能客服AI训练师初级培训课程，掌握基础AI训练技能。',
+                        points: ['智能客服意图识别', '语料标注与优化', '模型效果评估']
+                    }, {
+                        time: '2026.07',
+                        title: '人工智能训练师（高级）',
+                        org: '达摩院 · 机器智能技术事业部',
+                        desc: '通过高级认证，具备独立完成AI训练项目的能力。',
+                        points: ['多轮对话设计', '复杂场景训练', 'AI训练流程管理']
+                    }]
+                }, {
+                    id: 'practice',
+                    label: '实践探索',
+                    icon: 'sparkles',
+                    items: [{
+                        time: '2026.06 – 至今',
+                        title: '个人知识库搭建',
+                        org: '自主项目',
+                        desc: '构建个人知识管理体系，践行「知识复利」理念。',
+                        points: ['使用知识管理工具搭建个人知识库', '整理文博与AI学习笔记', '探索知识输出与分享']
+                    }, {
+                        time: '2026.07 – 至今',
+                        title: 'AI技术自学与实践',
+                        org: '自主探索',
+                        desc: '系统学习AI基础知识，关注文博数字化前沿。',
+                        points: ['学习机器学习基础与NLP入门', '关注AI在文化遗产领域的应用', '参与AI社区与开源项目']
+                    }, {
+                        time: '2026 暑假',
+                        title: '星辰校园合伙人',
+                        org: '星辰 · 校园合伙人计划',
+                        desc: '担任星辰校园合伙人，系统锻炼销售能力并同步运营个人数码自媒体账号。',
+                        points: ['面向校园场景开展推广与销售实践，完成从触达到成单的完整闭环', '同步运营个人数码自媒体账号，负责选题、内容产出与账号维护', '在真实交易与内容运营中锻炼沟通表达、用户洞察与自我管理能力'],
+                        image: '实践.jpg',
+                        imageCaption: '个人数码自媒体账号运营记录',
+                        imageTall: true,
+                        imageAr: '1255 / 2558'
+                    }]
+                }],
+                projects: [{
+                    id: 'ai',
+                    label: 'AI训练',
+                    items: [{
+                        title: 'AI赋能文博探索',
+                        stack: ['NLP', '知识图谱', '数字化'],
+                        desc: '探索AI技术在文物数字化保护、博物馆智能导览、文化遗产知识图谱构建等领域的应用场景与实现路径。',
+                        link: '#'
+                    }]
+                }, {
+                    id: 'km',
+                    label: '知识管理',
+                    items: [{
+                        title: '文博×AI 学习笔记',
+                        stack: ['内容创作', '知识输出', '分享'],
+                        desc: '系统整理文博与AI交叉领域的学习笔记，涵盖数字化保护、智慧博物馆、AI训练实践等主题，持续输出与迭代。',
+                        link: '#'
+                    }]
+                }],
+                skills: [{
+                    category: 'AI技术',
+                    items: [
+                        { name: '智能客服训练', level: 80 },
+                        { name: 'NLP基础', level: 60 },
+                        { name: '机器学习入门', level: 55 },
+                    ]
+                }, {
+                    category: '工具与软件',
+                    items: [
+                        { name: 'PPT制作', level: 75 },
+                        { name: '知识管理工具', level: 80 },
+                        { name: '办公协作', level: 70 },
+                    ]
+                }, {
+                    category: '领域知识',
+                    items: [
+                        { name: '文物与博物馆学', level: 70 },
+                        { name: '数字化保护', level: 65 },
+                        { name: '文化遗产传播', level: 60 },
+                    ]
+                }, {
+                    category: '软技能',
+                    items: [
+                        { name: '自我驱动学习', level: 90 },
+                        { name: '交叉领域思考', level: 85 },
+                        { name: '知识输出与分享', level: 70 },
+                    ]
+                }],
+                education: [{
+                    icon: 'graduation-cap',
+                    title: '新疆师范大学',
+                    meta: '文物与博物馆学 · 本科（2026 – 2030）',
+                    desc: '准大一新生，致力于将人工智能与文博专业相结合，探索数字化文物保护与博物馆智能化的新路径。'
+                }, {
+                    icon: 'heart-handshake',
+                    title: '久久公益节 · 荣誉证书',
+                    meta: '2026年9月 · 大学生青年公益打卡行动',
+                    desc: '参与久久公益节大学生青年公益打卡行动，完成全部打卡任务，活动合格并获颁荣誉证书。'
+                }, {
+                    icon: 'award',
+                    title: '达摩院人工智能训练师（初级）',
+                    meta: '2026年7月 · 机器智能技术事业部',
+                    desc: '完成智能客服AI训练师初级培训，认证合格。',
+                    image: '1.jpg',
+                    credential: 'AIT260718193846000162',
+                    wide: true
+                }, {
+                    icon: 'award',
+                    title: '达摩院人工智能训练师（高级）',
+                    meta: '2026年7月 · 机器智能技术事业部',
+                    desc: '完成智能客服AI训练师高级培训，认证合格。',
+                    image: '2.jpg',
+                    credential: 'AIT260718204057000108',
+                    wide: true
+                }],
+                /* ===== 个人生活 ===== */
+                life: {
+                    intro: {
+                        icon: 'smile',
+                        title: '陪伴的时光',
+                        desc: '生活里那些不设目标的时刻最让人放松。陪孩子玩一次抓娃娃机，看他专注地按下按钮、为一只玩偶雀跃或懊恼——耐心、专注与不轻易放弃，其实也是学习与做事最需要的东西。'
+                    },
+                    photos: [{
+                        src: '4.jpg',
+                        caption: '抓娃娃机前的专注时刻',
+                        ar: '3 / 4'
+                    }, {
+                        src: '3.jpg',
+                        caption: '家里的装修现场 · 参与其中',
+                        ar: '3 / 4'
+                    }, {
+                        src: '5.jpg',
+                        caption: '久久公益节 · 大学生青年公益打卡行动',
+                        ar: '1682 / 1190'
+                    }],
+                    video: {
+                        src: '2.mp4',
+                        icon: 'activity',
+                        title: '个人风采 · 舞蹈展示',
+                        meta: '21 秒 · 身体协调与全面发展',
+                        desc: '用身体去记忆节奏与动作，是我在专业学习之外保持全面发展的方式。舞蹈锻炼身体的协调性与节奏感，也要求把一组动作反复打磨到熟练——这份专注与坚持，同样适用于长期的学习与项目实践。',
+                        points: ['身体协调性与节奏感训练', '动作拆解与反复打磨的耐心', '学业之外保持规律的身体锻炼']
+                    }
+                },
+                /* ===== 个人爱好 ===== */
+                hobbies: [{
+                    icon: 'crown',
+                    title: '下象棋',
+                    meta: '爱好 · 逻辑思维锻炼',
+                    desc: '爱好下象棋，虽棋艺不精但注重通过棋局锻炼逻辑思维能力。享受在有限的棋盘上推演攻防、权衡取舍的过程——每一步都要为后续若干步负责。',
+                    photos: ['6.jpg', '7.jpg']
+                }],
+                buildDate: new Date().toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' })
+            };
+
+            // ============================================================
+            // RENDER
+            // ============================================================
+            function renderHeroTags() {
+                const el = document.getElementById('heroTags');
+                if (!el) return;
+                el.innerHTML = resume.tags.map(t => `<span class="tag">${t}</span>`).join('');
+            }
+
+            function renderHighlights() {
+                const el = document.getElementById('highlightsGrid');
+                if (!el) return;
+                el.innerHTML = resume.highlights.map(h => `
+                    <div class="glass metric reveal p-5 sm:p-6">
+                        <div class="metric-num grad-num text-4xl font-extrabold leading-none tracking-tight sm:text-5xl">${h.number}</div>
+                        <div class="mt-3 text-sm font-semibold text-white">${h.label}</div>
+                        <div class="mt-1 text-xs leading-relaxed text-slate-400">${h.sub}</div>
+                    </div>`).join('');
+            }
+
+            function renderFeaturedWork() {
+                const el = document.getElementById('featuredWork');
+                if (!el || !resume.featured) return;
+                const w = resume.featured;
+                el.innerHTML = `
+                    <article class="glass reveal overflow-hidden">
+                        <!-- 标题区 -->
+                        <div class="border-b border-white/10 p-6 sm:p-8">
+                            <div class="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
+                                <div class="min-w-0">
+                                    <div class="inline-flex items-center gap-2 rounded-full border border-cyan-500/25 bg-cyan-500/10 px-3 py-1 text-xs font-semibold text-cyan-300">
+                                        <span class="dot-ping"></span>已上线 · 教师节礼物
+                                    </div>
+                                    <h3 class="mt-3 text-2xl font-extrabold tracking-tight text-white">${w.name}</h3>
+                                    <p class="mt-1.5 flex items-center gap-2 text-sm font-semibold text-cyan-400">
+                                        <i data-lucide="heart" class="h-4 w-4"></i>${w.subtitle}
+                                    </p>
+                                </div>
+                                <div class="no-print flex flex-none flex-wrap gap-3">
+                                    <a href="${w.url}" target="_blank" rel="noopener" class="btn btn-primary">
+                                        <i data-lucide="external-link" class="h-4 w-4"></i> 访问线上作品
+                                    </a>
+                                    <button id="copyWorkUrl" class="btn" data-copy-url="${w.url}">
+                                        <i data-lucide="link" class="h-4 w-4"></i> 复制链接
+                                    </button>
+                                </div>
+                            </div>
+                            <p class="mt-5 max-w-3xl text-[15px] leading-7 text-slate-300">${w.concept}</p>
+                            <div class="mt-5 flex flex-wrap gap-2">
+                                ${w.tech.map(t => `<span class="tag">${t}</span>`).join('')}
+                            </div>
+                        </div>
+
+                        <!-- 演示视频 + 指标 -->
+                        <div class="grid grid-cols-1 gap-6 p-6 sm:p-8 lg:grid-cols-5">
+                            <div class="lg:col-span-3">
+                                <div class="mb-3 flex items-center gap-2 text-sm font-semibold text-white">
+                                    <i data-lucide="play-circle" class="h-4 w-4 text-cyan-400"></i>${w.videoLabel}
+                                </div>
+                                <video class="w-full rounded-xl border border-white/10 bg-black/40" controls preload="metadata" playsinline>
+                                    <source src="${w.video}" type="video/mp4">
+                                    您的浏览器不支持视频播放，请<a href="${w.video}" class="text-cyan-400">点此下载观看</a>。
+                                </video>
+                                <p class="print-only mt-3 text-sm text-slate-600">
+                                    演示视频：${w.video}（45 秒），完整效果见 ${w.url}
+                                </p>
+                                <p class="no-print mt-3 flex items-center gap-2 text-xs text-slate-400">
+                                    <i data-lucide="info" class="h-3.5 w-3.5 flex-none text-cyan-400"></i>
+                                    建议全屏观看完整交互效果
+                                </p>
+                            </div>
+                            <div class="lg:col-span-2">
+                                <div class="grid grid-cols-2 gap-3">
+                                    ${w.stats.map(s => `
+                                        <div class="rounded-xl border border-white/10 bg-white/[0.03] p-4">
+                                            <div class="grad-num text-2xl font-extrabold leading-none">${s.num}</div>
+                                            <div class="mt-2 text-xs font-semibold text-white">${s.label}</div>
+                                            <div class="mt-0.5 text-[11px] text-slate-400">${s.sub}</div>
+                                        </div>`).join('')}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 线上访问 -->
+                        <div class="border-t border-white/10 p-6 sm:p-8">
+                            <div class="flex flex-col gap-4 rounded-xl border border-white/10 bg-white/[0.03] p-5 sm:flex-row sm:items-center sm:justify-between">
+                                <div class="flex min-w-0 items-center gap-3">
+                                    <i data-lucide="globe" class="h-4 w-4 flex-none text-cyan-400"></i>
+                                    <div class="min-w-0">
+                                        <div class="text-xs font-semibold text-white">线上访问</div>
+                                        <a href="${w.url}" target="_blank" rel="noopener"
+                                           class="block truncate text-sm font-medium text-cyan-400 transition hover:text-cyan-300">${w.url}</a>
+                                    </div>
+                                </div>
+                                <a href="${w.url}" target="_blank" rel="noopener" class="btn btn-primary no-print flex-none justify-center">
+                                    <i data-lucide="external-link" class="h-4 w-4"></i> 立即访问
+                                </a>
+                            </div>
+                        </div>
+                    </article>`;
+            }
+
+            function renderExperience() {
+                const el = document.getElementById('experienceFlow');
+                if (!el) return;
+                el.innerHTML = resume.experience.map(cat => `
+                    <div class="glass glass-hover reveal p-6">
+                        <div class="mb-5 inline-flex items-center gap-2 rounded-full border border-cyan-500/20 bg-cyan-500/10 px-3 py-1 text-xs font-semibold text-cyan-300">
+                            <i data-lucide="${cat.icon}" class="h-3.5 w-3.5"></i>${cat.label}
+                        </div>
+                        <div class="timeline space-y-7">
+                            ${cat.items.map(item => `
+                                <div class="relative">
+                                    <span class="timeline-dot"></span>
+                                    <h3 class="font-semibold text-white">${item.title}</h3>
+                                    <div class="mt-0.5 flex flex-wrap items-center gap-x-3 text-xs text-slate-400">
+                                        <span class="inline-flex items-center gap-1.5"><i data-lucide="calendar" class="h-3.5 w-3.5"></i>${item.time}</span>
+                                        <span class="inline-flex items-center gap-1.5"><i data-lucide="building-2" class="h-3.5 w-3.5"></i>${item.org}</span>
+                                    </div>
+                                    <p class="mt-2.5 text-sm leading-6 text-slate-300">${item.desc}</p>
+                                    <ul class="mt-3 space-y-1.5">
+                                        ${item.points.map(pt => `<li class="flex items-start gap-2 text-sm text-slate-400"><i data-lucide="chevron-right" class="mt-0.5 h-3.5 w-3.5 flex-none text-cyan-400"></i>${pt}</li>`).join('')}
+                                    </ul>
+                                    ${item.image ? `
+                                    <figure class="mt-4">
+                                        <img src="${item.image}" alt="${item.imageCaption}" loading="lazy" decoding="async"
+                                             ${item.imageAr ? `style="aspect-ratio:${item.imageAr}"` : ''}
+                                             class="${item.imageTall ? 'mx-auto max-h-[30rem] w-full object-contain' : 'w-full object-cover'} rounded-xl border border-white/10">
+                                        <figcaption class="mt-2 flex items-center gap-1.5 text-xs text-slate-500">
+                                            <i data-lucide="camera" class="h-3.5 w-3.5 flex-none"></i>${item.imageCaption}
+                                        </figcaption>
+                                    </figure>` : ''}
+                                </div>`).join('')}
+                        </div>
+                    </div>`).join('');
+            }
+
+            function renderProjects() {
+                const el = document.getElementById('projectsGrid');
+                if (!el) return;
+                el.innerHTML = resume.projects.map(group => group.items.map(item => `
+                    <article class="glass glass-hover reveal flex flex-col p-6">
+                        <div class="mb-3 inline-flex w-fit items-center gap-2 rounded-full border border-indigo-500/25 bg-indigo-500/10 px-3 py-1 text-xs font-semibold text-indigo-300">
+                            <i data-lucide="folder-git-2" class="h-3.5 w-3.5"></i>${group.label}
+                        </div>
+                        <h3 class="text-base font-bold text-white">${item.title}</h3>
+                        <p class="mt-2.5 flex-1 text-sm leading-6 text-slate-300">${item.desc}</p>
+                        <div class="mt-4 flex flex-wrap gap-2">
+                            ${item.stack.map(s => `<span class="tag">${s}</span>`).join('')}
+                        </div>
+                        ${item.link && item.link !== '#' ? `<a href="${item.link}" target="_blank" rel="noopener" class="mt-4 inline-flex w-fit items-center gap-1.5 text-sm font-medium text-cyan-400 transition hover:text-cyan-300 hover:gap-2.5">查看详情 <i data-lucide="arrow-up-right" class="h-4 w-4"></i></a>` : ''}
+                    </article>`).join('')).join('');
+            }
+
+            function renderSkills() {
+                const el = document.getElementById('skillsGrid');
+                if (!el) return;
+                el.innerHTML = resume.skills.map(group => `
+                    <div class="glass glass-hover reveal p-6">
+                        <h3 class="mb-5 flex items-center gap-2 text-base font-bold text-white">
+                            <span class="h-1.5 w-1.5 rounded-full bg-cyan-400 shadow-[0_0_8px_2px_rgba(34,211,238,0.7)]"></span>${group.category}
+                        </h3>
+                        <div class="space-y-4">
+                            ${group.items.map(item => `
+                                <div>
+                                    <div class="mb-2 flex items-center justify-between text-sm">
+                                        <span class="text-slate-200">${item.name}</span>
+                                        <span class="tabular-nums text-cyan-400">${item.level}%</span>
+                                    </div>
+                                    <div class="bar-track"><div class="bar-fill" data-level="${item.level}"></div></div>
+                                </div>`).join('')}
+                        </div>
+                    </div>`).join('');
+            }
+
+            function renderEducation() {
+                const el = document.getElementById('educationList');
+                if (!el) return;
+                el.innerHTML = resume.education.map(item => `
+                    <div class="glass glass-hover reveal overflow-hidden${item.wide ? ' md:col-span-2' : ''}">
+                        ${item.image ? `
+                        <button type="button" class="zoom-trigger group relative block w-full cursor-zoom-in"
+                                data-zoom="${item.image}" data-zoom-title="${item.title}">
+                            <img src="${item.image}" alt="${item.title}证书" loading="lazy" decoding="async"
+                                 style="aspect-ratio:1810 / 1279"
+                                 class="w-full bg-white object-contain">
+                            <span class="pointer-events-none absolute inset-0 flex items-center justify-center bg-slate-950/0 opacity-0 transition duration-300 group-hover:bg-slate-950/40 group-hover:opacity-100">
+                                <span class="flex items-center gap-2 rounded-full border border-white/20 bg-slate-900/80 px-4 py-2 text-xs font-medium text-white backdrop-blur">
+                                    <i data-lucide="zoom-in" class="h-3.5 w-3.5"></i>点击放大查看
+                                </span>
+                            </span>
+                        </button>` : ''}
+                        <div class="flex gap-4 p-6">
+                            <span class="flex h-10 w-10 flex-none items-center justify-center rounded-xl border border-cyan-500/25 bg-cyan-500/10 text-cyan-300">
+                                <i data-lucide="${item.icon}" class="h-5 w-5"></i>
+                            </span>
+                            <div class="min-w-0">
+                                <h3 class="text-base font-bold text-white">${item.title}</h3>
+                                <div class="mt-1 text-xs text-slate-400">${item.meta}</div>
+                                <p class="mt-3 text-sm leading-6 text-slate-300">${item.desc}</p>
+                                ${item.credential ? `
+                                <div class="mt-3 flex items-center gap-1.5 text-xs text-slate-500">
+                                    <i data-lucide="hash" class="h-3.5 w-3.5 flex-none text-cyan-400"></i>证书编号 ${item.credential}
+                                </div>` : ''}
+                            </div>
+                        </div>
+                    </div>`).join('');
+            }
+
+            function renderLife() {
+                const introEl = document.getElementById('lifeIntro');
+                const el = document.getElementById('lifeGrid');
+                if (!el || !resume.life) return;
+                const L = resume.life;
+                if (introEl && L.intro) {
+                    introEl.innerHTML = `
+                        <div class="glass reveal flex flex-col gap-4 p-6 sm:flex-row sm:items-center">
+                            <span class="flex h-11 w-11 flex-none items-center justify-center rounded-xl border border-cyan-500/25 bg-cyan-500/10 text-cyan-300">
+                                <i data-lucide="${L.intro.icon}" class="h-5 w-5"></i>
+                            </span>
+                            <div class="min-w-0">
+                                <h3 class="text-base font-bold text-white">${L.intro.title}</h3>
+                                <p class="mt-2 text-sm leading-6 text-slate-300">${L.intro.desc}</p>
+                            </div>
+                        </div>`;
+                }
+                el.innerHTML = (L.photos || []).map(p => `
+                    <figure class="glass glass-hover reveal mb-5 break-inside-avoid overflow-hidden">
+                        <img src="${p.src}" alt="${p.caption}" loading="lazy" decoding="async"
+                             style="aspect-ratio:${p.ar}" class="w-full object-cover">
+                        <figcaption class="flex items-center gap-1.5 px-4 py-3 text-xs text-slate-400">
+                            <i data-lucide="camera" class="h-3.5 w-3.5 flex-none text-cyan-400"></i>${p.caption}
+                        </figcaption>
+                    </figure>`).join('');
+
+                const videoEl = document.getElementById('lifeVideo');
+                if (videoEl && L.video) {
+                    const v = L.video;
+                    videoEl.innerHTML = `
+                        <div class="glass reveal overflow-hidden">
+                            <div class="flex flex-col gap-4 border-b border-white/10 p-6 sm:flex-row sm:items-center">
+                                <span class="flex h-11 w-11 flex-none items-center justify-center rounded-xl border border-cyan-500/25 bg-cyan-500/10 text-cyan-300">
+                                    <i data-lucide="${v.icon}" class="h-5 w-5"></i>
+                                </span>
+                                <div class="min-w-0">
+                                    <h3 class="text-base font-bold text-white">${v.title}</h3>
+                                    <div class="mt-0.5 text-xs text-slate-400">${v.meta}</div>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 gap-0 lg:grid-cols-5">
+                                <div class="lg:col-span-3">
+                                    <div class="bg-black/40 px-6 py-6 lg:flex lg:h-full lg:items-center lg:justify-center">
+                                        <video class="mx-auto block w-full max-w-[19rem] rounded-xl bg-black/50 lg:max-w-[17rem]"
+                                               controls preload="metadata" playsinline
+                                               style="aspect-ratio:9 / 16" poster="">
+                                            <source src="${v.src}" type="video/mp4">
+                                            您的浏览器不支持视频播放，请<a href="${v.src}" class="text-cyan-400">点此下载观看</a>。
+                                        </video>
+                                    </div>
+                                    <p class="print-only px-6 py-3 text-sm text-slate-600">
+                                        舞蹈展示视频：${v.src}（540×960 · 21 秒），原件与简历位于同一目录。
+                                    </p>
+                                </div>
+                                <div class="p-6 lg:col-span-2">
+                                    <p class="text-sm leading-6 text-slate-300">${v.desc}</p>
+                                    <ul class="mt-4 space-y-1.5">
+                                        ${(v.points || []).map(pt => `<li class="flex items-start gap-2 text-sm text-slate-400"><i data-lucide="chevron-right" class="mt-0.5 h-3.5 w-3.5 flex-none text-cyan-400"></i>${pt}</li>`).join('')}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>`;
+                }
+            }
+
+            function renderHobbies() {
+                const el = document.getElementById('hobbiesGrid');
+                if (!el || !resume.hobbies) return;
+                el.innerHTML = resume.hobbies.map(h => `
+                    <div class="glass glass-hover reveal overflow-hidden">
+                        <div class="flex flex-col gap-5 p-6 sm:flex-row sm:items-start">
+                            <span class="flex h-11 w-11 flex-none items-center justify-center rounded-xl border border-cyan-500/25 bg-cyan-500/10 text-cyan-300">
+                                <i data-lucide="${h.icon}" class="h-5 w-5"></i>
+                            </span>
+                            <div class="min-w-0">
+                                <h3 class="text-base font-bold text-white">${h.title}</h3>
+                                <div class="mt-0.5 text-xs text-slate-400">${h.meta}</div>
+                                <p class="mt-3 text-sm leading-6 text-slate-300">${h.desc}</p>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4 p-6 pt-0">
+                            ${(h.photos || []).map(src => `
+                                <img src="${src}" alt="${h.title}照片" loading="lazy" decoding="async"
+                                     class="aspect-[2/3] w-full rounded-xl border border-white/10 object-cover transition duration-500 hover:border-cyan-500/40">`).join('')}
+                        </div>
+                    </div>`).join('');
+            }
+
+            function renderFooter() {
+                const el = document.getElementById('buildDate');
+                if (el) el.textContent = resume.buildDate;
+                const emailEl = document.getElementById('emailDisplay');
+                if (emailEl) emailEl.textContent = resume.contact.email;
+            }
+
+            // ============================================================
+            // INTERACTIONS
+            // ============================================================
+            function showToast(msg) {
+                const el = document.getElementById('toast');
+                if (!el) return;
+                el.textContent = msg;
+                el.classList.remove('opacity-0', 'invisible', 'translate-y-3');
+                clearTimeout(el._timer);
+                el._timer = setTimeout(() => {
+                    el.classList.add('opacity-0', 'invisible', 'translate-y-3');
+                }, 2000);
+            }
+
+            function fallbackCopy(raw, ok) {
+                const ta = document.createElement('textarea');
+                ta.value = raw;
+                ta.style.position = 'fixed';
+                ta.style.opacity = '0';
+                document.body.appendChild(ta);
+                ta.select();
+                document.execCommand('copy');
+                ta.remove();
+                showToast(ok);
+            }
+
+            function copyText(raw, ok) {
+                if (navigator.clipboard && window.isSecureContext) {
+                    navigator.clipboard.writeText(raw).then(() => showToast(ok)).catch(() => fallbackCopy(raw, ok));
+                } else {
+                    fallbackCopy(raw, ok);
+                }
+            }
+
+            function setupContact() {
+                const map = {
+                    email: { value: resume.contact.email, ok: '📧 邮箱已复制到剪贴板' },
+                    wechat: { value: resume.contact.wechat, ok: '💬 微信号已复制' },
+                    phone: { value: resume.contact.phone, ok: '📱 手机号已复制' },
+                };
+                document.querySelectorAll('[data-copy]').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const c = map[btn.dataset.copy];
+                        if (c) copyText(c.value, c.ok);
+                    });
+                });
+            }
+
+            function setupWorkCopy() {
+                const btn = document.getElementById('copyWorkUrl');
+                if (!btn) return;
+                btn.addEventListener('click', () => {
+                    copyText(btn.dataset.copyUrl, '🔗 作品链接已复制');
+                });
+            }
+
+            function setupLightbox() {
+                const box = document.getElementById('lightbox');
+                const img = document.getElementById('lightboxImg');
+                const title = document.getElementById('lightboxTitle');
+                if (!box || !img) return;
+
+                const open = (src, name) => {
+                    img.src = src;
+                    img.alt = (name || '证书') + ' 大图';
+                    if (title) title.textContent = name || '';
+                    box.classList.remove('invisible', 'opacity-0');
+                    document.body.style.overflow = 'hidden';
+                };
+                const close = () => {
+                    box.classList.add('invisible', 'opacity-0');
+                    document.body.style.overflow = '';
+                };
+
+                document.addEventListener('click', (e) => {
+                    const trigger = e.target.closest('.zoom-trigger');
+                    if (trigger) {
+                        open(trigger.dataset.zoom, trigger.dataset.zoomTitle);
+                        return;
+                    }
+                    if (e.target === box) close();
+                });
+
+                const closeBtn = document.getElementById('lightboxClose');
+                if (closeBtn) closeBtn.addEventListener('click', close);
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape' && !box.classList.contains('invisible')) close();
+                });
+            }
+
+            function initReveal() {
+                const els = document.querySelectorAll('.reveal');
+                if (!('IntersectionObserver' in window)) {
+                    els.forEach(e => e.classList.add('is-visible'));
+                    return;
+                }
+                const io = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('is-visible');
+                            io.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.08 });
+                els.forEach((e, i) => {
+                    e.style.transitionDelay = Math.min(i, 5) * 55 + 'ms';
+                    io.observe(e);
+                });
+
+                /* 兜底：若观察器未能触发（极端环境/被拦截），确保内容最终可见 */
+                setTimeout(() => {
+                    if (!document.querySelector('.reveal.is-visible')) {
+                        els.forEach(e => e.classList.add('is-visible'));
+                    }
+                }, 1200);
+            }
+
+            function animateSkillBars() {
+                const bars = document.querySelectorAll('.bar-fill');
+                if (!('IntersectionObserver' in window)) {
+                    bars.forEach(b => b.style.width = b.dataset.level + '%');
+                    return;
+                }
+                const io = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.style.width = entry.target.dataset.level + '%';
+                            io.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.4 });
+                bars.forEach(b => io.observe(b));
+            }
+
+            function init() {
+                renderHeroTags();
+                renderHighlights();
+                renderFeaturedWork();
+                renderExperience();
+                renderProjects();
+                renderSkills();
+                renderEducation();
+                renderLife();
+                renderHobbies();
+                renderFooter();
+
+                initReveal();
+                animateSkillBars();
+                setupContact();
+                setupLightbox();
+                setupWorkCopy();
+                document.getElementById('printBtn')?.addEventListener('click', () => window.print());
+
+                if (window.lucide) lucide.createIcons();
+            }
+
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', init);
+            } else {
+                init();
+            }
+
+        })();
+    </script>
+</body>
+</html>
