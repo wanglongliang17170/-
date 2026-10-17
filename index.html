@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
-    <meta name="theme-color" content="#030712">
+    <meta name="theme-color" content="#01030a">
     <title>王隆粮 · 文博×AI交叉领域探索者</title>
 
     <!-- Plus Jakarta Sans -->
@@ -35,76 +35,62 @@
             overflow-x: hidden;
         }
         body {
-            background-color: #030712;
-            color: #e2e8f0;
+            background-color: #01030a;
+            color: #e6efe9;
             overflow-x: hidden;
             font-feature-settings: 'tnum';
         }
 
-        /* ===== 背景光斑 ===== */
-        .glow {
-            position: fixed;
-            border-radius: 9999px;
-            filter: blur(140px);
-            pointer-events: none;
-            z-index: -1;
-        }
-        .glow-cyan {
-            width: 620px;
-            height: 620px;
-            top: -180px;
-            left: -180px;
-            background: radial-gradient(circle, rgba(34, 211, 238, 0.16), transparent 70%);
-        }
-        .glow-indigo {
-            width: 640px;
-            height: 640px;
-            bottom: -200px;
-            right: -200px;
-            background: radial-gradient(circle, rgba(99, 102, 241, 0.16), transparent 70%);
-        }
-        .grid-bg {
+        /* ===== 动态背景：未来科技能量核心 canvas（位于内容同层之下的 -3 层） =====
+           实际绘制由页面底部的 IIFE 完成：能量核心 / 旋转几何环 / 体积光与镜头光晕 /
+           数据流粒子 / 数字雨 / 电路纹理与 HUD / 扫描线 / 发光回纹边框 / 故障艺术 RGB 分离。
+           桌面端与手机端运行同一套动效，仅排版随屏宽变化。 */
+        .bg-scene {
             position: fixed;
             inset: 0;
-            z-index: -2;
+            z-index: -3;
+            overflow: hidden;
             pointer-events: none;
-            background-image:
-                linear-gradient(rgba(148, 163, 184, 0.045) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(148, 163, 184, 0.045) 1px, transparent 1px);
-            background-size: 64px 64px;
-            mask-image: radial-gradient(ellipse 80% 55% at 50% 0%, #000 30%, transparent 75%);
-            -webkit-mask-image: radial-gradient(ellipse 80% 55% at 50% 0%, #000 30%, transparent 75%);
+            background: #01030a;
+        }
+        #bgCanvas {
+            position: absolute;
+            inset: 0;
+            display: block;
+            width: 100%;
+            height: 100%;
         }
 
-        /* ===== 毛玻璃卡片 ===== */
+        /* ===== 毛玻璃卡片（深色主题：墨绿半透明面板） ===== */
         .glass {
-            background: rgba(15, 23, 42, 0.6);
-            backdrop-filter: blur(24px) saturate(1.3);
-            -webkit-backdrop-filter: blur(24px) saturate(1.3);
-            border: 1px solid rgba(255, 255, 255, 0.10);
+            background: rgba(13, 26, 22, 0.62);
+            backdrop-filter: blur(10px) saturate(1.10);
+            -webkit-backdrop-filter: blur(10px) saturate(1.10);
+            border: 1px solid rgba(146, 206, 178, 0.14);
             border-radius: 1rem;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
             transition: transform .3s cubic-bezier(.4, 0, .2, 1), border-color .3s ease, box-shadow .3s ease;
         }
 
-        /* 指标卡：青色微发光 + 上浮 */
+        /* 指标卡：玉青微发光 + 上浮 */
         .metric:hover {
             transform: translateY(-4px);
-            border-color: rgba(34, 211, 238, 0.35);
-            box-shadow: 0 0 0 1px rgba(34, 211, 238, 0.12), 0 12px 40px -12px rgba(34, 211, 238, 0.35);
+            border-color: rgba(146, 206, 178, 0.40);
+            box-shadow: 0 0 0 1px rgba(146, 206, 178, 0.14), 0 12px 40px -12px rgba(0, 0, 0, 0.60), 0 0 26px rgba(146, 206, 178, 0.18);
         }
         .metric:hover .metric-num {
-            filter: drop-shadow(0 0 12px rgba(34, 211, 238, 0.45));
+            filter: drop-shadow(0 0 12px rgba(146, 206, 178, 0.45));
         }
 
-        /* 普通卡片 hover */
+        /* 普通卡片 hover（深色下用玉青描边与柔和投影，保证可点击区清晰） */
         .glass-hover:hover {
-            border-color: rgba(255, 255, 255, 0.22);
-            box-shadow: 0 18px 50px -20px rgba(34, 211, 238, 0.25);
+            border-color: rgba(146, 206, 178, 0.30);
+            box-shadow: 0 18px 50px -20px rgba(0, 0, 0, 0.65);
         }
 
-        /* ===== 渐变数字 ===== */
+        /* ===== 渐变数字（深色下用亮青/淡靛，保证在墨绿面板上的对比） ===== */
         .grad-num {
-            background-image: linear-gradient(135deg, #67e8f9 0%, #818cf8 100%);
+            background-image: linear-gradient(135deg, #67e8f9 0%, #a5b4fc 100%);
             background-clip: text;
             -webkit-background-clip: text;
             color: transparent;
@@ -112,7 +98,7 @@
             transition: filter .3s ease;
         }
 
-        /* ===== 技术栈胶囊 ===== */
+        /* ===== 技术栈胶囊（深色：淡青字 + 青底/描边） ===== */
         .tag {
             display: inline-flex;
             align-items: center;
@@ -122,23 +108,33 @@
             font-size: 12px;
             font-weight: 500;
             line-height: 1.4;
-            background: rgba(6, 182, 212, 0.10);
-            border: 1px solid rgba(6, 182, 212, 0.20);
-            color: #67e8f9;
+            background: rgba(34, 211, 238, 0.10);
+            border: 1px solid rgba(34, 211, 238, 0.26);
+            color: #a5f3fc;
             transition: background .25s ease, border-color .25s ease;
             white-space: nowrap;
         }
         .tag:hover {
-            background: rgba(6, 182, 212, 0.18);
-            border-color: rgba(6, 182, 212, 0.4);
+            background: rgba(34, 211, 238, 0.18);
+            border-color: rgba(34, 211, 238, 0.45);
         }
 
-        /* ===== 时间轴 ===== */
+        /* 竹简展开：技能标签加载时逐个淡入（延迟由 renderHeroTags 注入，间隔 0.1s） */
+        .tag-unfold {
+            opacity: 0;
+            animation: tagUnfold .5s cubic-bezier(.4, 0, .2, 1) forwards;
+        }
+        @keyframes tagUnfold {
+            0%   { opacity: 0; transform: translateY(8px) scale(.94); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        /* ===== 时间轴（深色：玉青节点 + 低亮描边） ===== */
         .timeline {
             position: relative;
             margin-left: 4px;
             padding-left: 28px;
-            border-left: 1px solid rgba(148, 163, 184, 0.18);
+            border-left: 1px solid rgba(146, 206, 178, 0.16);
         }
         .timeline-dot {
             position: absolute;
@@ -148,7 +144,7 @@
             height: 7px;
             border-radius: 9999px;
             background: #22d3ee;
-            box-shadow: 0 0 0 4px rgba(34, 211, 238, 0.12), 0 0 12px rgba(34, 211, 238, 0.6);
+            box-shadow: 0 0 0 4px rgba(34, 211, 238, 0.12), 0 0 12px rgba(34, 211, 238, 0.45);
         }
 
         /* ===== 状态指示灯 ===== */
@@ -158,7 +154,7 @@
             height: 7px;
             border-radius: 9999px;
             background: #22d3ee;
-            box-shadow: 0 0 10px rgba(34, 211, 238, 0.8);
+            box-shadow: 0 0 10px rgba(34, 211, 238, 0.6);
         }
         .dot-ping::after {
             content: '';
@@ -173,23 +169,23 @@
             75%, 100% { transform: scale(3.2); opacity: 0; }
         }
 
-        /* ===== 技能条 ===== */
+        /* ===== 技能条（深色：低亮轨道 + 青靛填充） ===== */
         .bar-track {
             height: 5px;
             border-radius: 9999px;
-            background: rgba(148, 163, 184, 0.14);
+            background: rgba(255, 255, 255, 0.08);
             overflow: hidden;
         }
         .bar-fill {
             height: 100%;
             border-radius: 9999px;
-            background: linear-gradient(90deg, #22d3ee 0%, #6366f1 100%);
+            background: linear-gradient(90deg, #22d3ee 0%, #818cf8 100%);
             width: 0%;
             transition: width .9s cubic-bezier(.4, 0, .2, 1);
-            box-shadow: 0 0 10px rgba(34, 211, 238, 0.4);
+            box-shadow: 0 0 10px rgba(34, 211, 238, 0.35);
         }
 
-        /* ===== 按钮辉光 ===== */
+        /* ===== 按钮辉光（深色：微亮底 + 淡青描边/字，保证可点击与焦点可见） ===== */
         .btn {
             position: relative;
             display: inline-flex;
@@ -199,28 +195,30 @@
             border-radius: 0.75rem;
             font-size: 14px;
             font-weight: 600;
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            background: rgba(255, 255, 255, 0.04);
-            color: #e2e8f0;
+            border: 1px solid rgba(146, 206, 178, 0.22);
+            background: rgba(255, 255, 255, 0.05);
+            color: #dbe7e1;
             cursor: pointer;
             transition: all .28s cubic-bezier(.4, 0, .2, 1);
             overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
         }
         .btn:hover {
-            border-color: rgba(34, 211, 238, 0.45);
-            background: rgba(34, 211, 238, 0.10);
-            color: #fff;
+            border-color: rgba(34, 211, 238, 0.55);
+            background: rgba(34, 211, 238, 0.12);
+            color: #a5f3fc;
             transform: translateY(-2px);
-            box-shadow: 0 0 24px -4px rgba(34, 211, 238, 0.55);
+            box-shadow: 0 6px 20px -6px rgba(34, 211, 238, 0.45);
         }
         .btn-primary {
-            background: linear-gradient(135deg, rgba(34, 211, 238, 0.18), rgba(99, 102, 241, 0.18));
-            border-color: rgba(34, 211, 238, 0.35);
-            color: #fff;
+            background: linear-gradient(135deg, #0e7490, #4338ca);
+            border-color: rgba(34, 211, 238, 0.5);
+            color: #ffffff;
         }
         .btn-primary:hover {
-            background: linear-gradient(135deg, rgba(34, 211, 238, 0.3), rgba(99, 102, 241, 0.3));
-            box-shadow: 0 0 28px -4px rgba(34, 211, 238, 0.7);
+            background: linear-gradient(135deg, #0891b2, #4f46e5);
+            color: #ffffff;
+            box-shadow: 0 8px 24px -6px rgba(34, 211, 238, 0.55);
         }
         .btn:active { transform: translateY(0); }
 
@@ -229,7 +227,131 @@
             width: 28px;
             height: 2px;
             border-radius: 9999px;
-            background: linear-gradient(90deg, #22d3ee, rgba(99, 102, 241, 0.2));
+            background: linear-gradient(90deg, #22d3ee, rgba(129, 140, 248, 0.25));
+        }
+
+        /* ===== 象棋照片 · 平滑浏览 ===== */
+        .gallery-stage {
+            position: relative;
+            width: 100%;
+            max-width: 24rem;
+            margin: 0 auto;
+            aspect-ratio: 2 / 3;
+            border-radius: 1rem;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.10);
+            background: rgba(2, 6, 23, 0.55);
+            touch-action: pan-y;
+        }
+        .gallery-slide {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            transform: scale(1.045);
+            transition: opacity .55s cubic-bezier(.4, 0, .2, 1), transform .8s cubic-bezier(.4, 0, .2, 1);
+            pointer-events: none;
+        }
+        .gallery-slide.is-active {
+            opacity: 1;
+            transform: scale(1);
+            pointer-events: auto;
+            z-index: 1;
+        }
+        .gallery-slide img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        .gallery-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 20;
+            display: flex;
+            height: 2.75rem;
+            width: 2.75rem;
+            align-items: center;
+            justify-content: center;
+            border-radius: 9999px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            background: rgba(2, 6, 23, 0.55);
+            color: #e2e8f0;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            transition: all .25s ease;
+        }
+        .gallery-nav:hover {
+            border-color: rgba(34, 211, 238, 0.55);
+            background: rgba(8, 145, 178, 0.28);
+            color: #fff;
+            transform: translateY(-50%) scale(1.06);
+        }
+        .gallery-nav.prev { left: .6rem; }
+        .gallery-nav.next { right: .6rem; }
+        .gallery-counter {
+            position: absolute;
+            top: .7rem;
+            right: .8rem;
+            z-index: 20;
+            border-radius: 9999px;
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            background: rgba(2, 6, 23, 0.6);
+            padding: .2rem .6rem;
+            font-size: 11px;
+            font-weight: 600;
+            color: #cbd5e1;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+        .gallery-dots {
+            display: flex;
+            justify-content: center;
+            gap: .5rem;
+            margin-top: .9rem;
+        }
+        .gallery-dot {
+            height: .5rem;
+            width: .5rem;
+            border-radius: 9999px;
+            background: rgba(255, 255, 255, 0.25);
+            transition: all .25s ease;
+        }
+        .gallery-dot:hover { background: rgba(255, 255, 255, 0.5); }
+        .gallery-dot.is-active {
+            width: 1.4rem;
+            background: linear-gradient(90deg, #22d3ee 0%, #818cf8 100%);
+            box-shadow: 0 0 10px rgba(34, 211, 238, 0.45);
+        }
+        .gallery-cap {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: .4rem;
+            margin-top: .8rem;
+            min-height: 1.15rem;
+            text-align: center;
+            font-size: 12px;
+            color: #94a3b8;
+        }
+
+        /* ===== 背景音乐开关 ===== */
+        #musicToggle.is-on {
+            border-color: rgba(34, 211, 238, 0.5);
+            color: #67e8f9;
+            box-shadow: 0 0 24px -6px rgba(34, 211, 238, 0.65);
+        }
+        #musicToggle.is-on::after {
+            content: '';
+            position: absolute;
+            inset: -5px;
+            border-radius: 9999px;
+            border: 1px solid rgba(34, 211, 238, 0.4);
+            animation: musicPulse 2.8s ease-out infinite;
+        }
+        @keyframes musicPulse {
+            0% { transform: scale(.9); opacity: .8; }
+            100% { transform: scale(1.35); opacity: 0; }
         }
 
         /* ===== 入屏淡入 ===== */
@@ -247,9 +369,9 @@
         }
 
         ::-webkit-scrollbar { width: 8px; height: 8px; }
-        ::-webkit-scrollbar-track { background: #030712; }
-        ::-webkit-scrollbar-thumb { background: rgba(148, 163, 184, 0.25); border-radius: 12px; }
-        ::-webkit-scrollbar-thumb:hover { background: rgba(34, 211, 238, 0.45); }
+        ::-webkit-scrollbar-track { background: #0d1a16; }
+        ::-webkit-scrollbar-thumb { background: rgba(146, 206, 178, 0.22); border-radius: 12px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(34, 211, 238, 0.5); }
 
         @media (prefers-reduced-motion: reduce) {
             *, *::before, *::after {
@@ -263,17 +385,16 @@
         /* ===== 触摸与移动端优化 ===== */
         a, button { -webkit-tap-highlight-color: transparent; }
         body { touch-action: manipulation; }
-        img { background-color: rgba(255, 255, 255, 0.03); }
+        img { background-color: rgba(255, 255, 255, 0.04); }
         .btn { min-height: 44px; }
         .no-print > .btn, .no-print .btn { min-height: 44px; }
 
-        /* 小屏：降低模糊半径与光斑开销，保证滚动流畅 */
+        /* 小屏：降低模糊开销，保证滚动流畅 */
         @media (max-width: 640px) {
             .glass {
-                backdrop-filter: blur(12px) saturate(1.15);
-                -webkit-backdrop-filter: blur(12px) saturate(1.15);
+                backdrop-filter: blur(8px) saturate(1.05);
+                -webkit-backdrop-filter: blur(8px) saturate(1.05);
             }
-            .glow { filter: blur(70px); }
             .reveal.is-visible { transition-duration: .45s; }
         }
 
@@ -281,6 +402,74 @@
         @supports (padding: env(safe-area-inset-bottom)) {
             main { padding-left: max(1.25rem, env(safe-area-inset-left)); padding-right: max(1.25rem, env(safe-area-inset-right)); }
             #toast { bottom: calc(2rem + env(safe-area-inset-bottom)); }
+        }
+
+        /* ============================================================
+           深色主题：内容区与动态 canvas 背景分层
+           - 主容器 / 分区加半透明墨色蒙版，保证正文在动态背景上清晰可辨；
+           - 卡片悬停保留 0.4s 过渡 + 玉青光晕扩散；
+           - 打印逻辑不受影响（见下方独立的 @media print 区块）。
+           ============================================================ */
+        main {
+            background: rgba(8, 16, 13, 0.34);
+            backdrop-filter: blur(4px) saturate(1.05);
+            -webkit-backdrop-filter: blur(4px) saturate(1.05);
+            border-radius: 1.75rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.30);
+        }
+        main > section {
+            background: rgba(8, 16, 13, 0.22);
+            border-radius: 1.25rem;
+        }
+
+        /* 卡片悬停：0.4s 过渡 + 边缘淡淡的玉青光晕扩散。
+           用 main 前缀提高优先级，避免被 .reveal 的 transition 简写覆盖；
+           transition 中保留 opacity，才能让入屏淡入（.reveal）继续生效。 */
+        main .glass {
+            transition:
+                opacity .65s cubic-bezier(.4, 0, .2, 1),
+                transform .4s cubic-bezier(.4, 0, .2, 1),
+                border-color .4s ease,
+                box-shadow .4s ease;
+        }
+        main .glass:hover {
+            border-color: rgba(146, 206, 178, 0.34);
+            box-shadow:
+                0 0 0 1px rgba(146, 206, 178, 0.10),
+                0 18px 50px -20px rgba(0, 0, 0, 0.60),
+                0 0 26px rgba(146, 206, 178, 0.18);
+        }
+        main .metric:hover {
+            transform: translateY(-4px);
+            border-color: rgba(146, 206, 178, 0.40);
+            box-shadow:
+                0 0 0 1px rgba(146, 206, 178, 0.14),
+                0 12px 40px -12px rgba(0, 0, 0, 0.60),
+                0 0 26px rgba(146, 206, 178, 0.18);
+        }
+
+        /* 最暗的两级次要文字在深色背景上提亮，保证 WCAG 对比度 */
+        main .text-slate-600 { color: #94a3b8; }
+        main .text-slate-500 { color: #8b9bab; }
+
+        /* 焦点态：键盘操作时清晰定位每个可交互元素 */
+        main a:focus-visible,
+        main button:focus-visible,
+        main [tabindex]:focus-visible {
+            outline: 2px solid #67e8f9;
+            outline-offset: 2px;
+        }
+        #musicToggle:focus-visible,
+        #lightboxClose:focus-visible {
+            outline: 2px solid #67e8f9;
+            outline-offset: 2px;
+        }
+
+        /* 不支持 backdrop-filter 时的回退：改用更不透明的墨色面板 */
+        @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+            main { background: rgba(8, 16, 13, 0.92); }
+            main > section { background: rgba(8, 16, 13, 0.62); }
+            .glass { background: rgba(13, 26, 22, 0.95); }
         }
 
         /* ===== 打印 / 导出 PDF（移动端友好：单列窄版排版） ===== */
@@ -297,7 +486,14 @@
             }
 
             body { background: #fff !important; color: #111 !important; }
-            .no-print, .glow, .grid-bg { display: none !important; }
+            .no-print, .bg-scene, #musicToggle { display: none !important; }
+            /* 深色蒙版在纸上会变成灰块，必须清除 */
+            main, main > section {
+                background: none !important;
+                backdrop-filter: none !important;
+                -webkit-backdrop-filter: none !important;
+                box-shadow: none !important;
+            }
             main { max-width: none !important; padding: 0 !important; }
 
             .glass {
@@ -351,6 +547,38 @@
                 max-height: 92mm !important;
                 object-fit: contain !important;
             }
+            /* 爱好板块内的等级证书同样需完整可辨，单独放宽高度限制 */
+            #hobbiesGrid .cert-figure img { max-height: 88mm !important; }
+
+            /* 象棋照片：纸质版按序平铺，保证三张照片均完整可见 */
+            .gallery-nav, .gallery-dots, .gallery-counter { display: none !important; }
+            .gallery-stage {
+                max-width: 100% !important;
+                aspect-ratio: auto !important;
+                border: 0 !important;
+                border-radius: 0 !important;
+                background: none !important;
+                overflow: visible !important;
+            }
+            .gallery-slide {
+                position: relative !important;
+                opacity: 1 !important;
+                transform: none !important;
+                pointer-events: auto !important;
+                margin-bottom: 10px !important;
+            }
+            .gallery-slide img {
+                height: auto !important;
+                max-height: 72mm !important;
+                object-fit: contain !important;
+                border-radius: 8px;
+            }
+
+            /* 知识库截图：纸质版限制高度，完整可辨 */
+            #projectsGrid .project-shot img {
+                max-height: 70mm !important;
+                object-fit: contain !important;
+            }
 
             /* 视频在纸质版中无法播放，改为打印来源说明 */
             video { display: none !important; }
@@ -372,10 +600,10 @@
 </head>
 <body class="min-h-screen font-sans">
 
-    <!-- 背景 -->
-    <div class="grid-bg" aria-hidden="true"></div>
-    <div class="glow glow-cyan" aria-hidden="true"></div>
-    <div class="glow glow-indigo" aria-hidden="true"></div>
+    <!-- 动态背景：未来科技能量核心 canvas（能量云 / 电路纹理 / HUD 回纹边框 / 能量环 / 数据流粒子 / 扫描线 / 故障艺术，位于 -3 层） -->
+    <div class="bg-scene" aria-hidden="true">
+        <canvas id="bgCanvas"></canvas>
+    </div>
 
     <!-- Toast -->
     <div id="toast" role="alert"
@@ -397,12 +625,22 @@
         <p class="text-center text-xs text-slate-400">点击空白处或按 Esc 关闭</p>
     </div>
 
+    <!-- 背景音乐源：lucky.mp3（与简历同目录） -->
+    <audio id="bgm" src="lucky.mp3" loop preload="metadata"></audio>
+
+    <!-- 背景音乐开关 -->
+    <button id="musicToggle" type="button" aria-pressed="false" aria-label="开启背景音乐"
+            title="背景音乐：点击开启（柔和淡入）"
+            class="no-print fixed bottom-6 right-5 z-[9998] flex h-12 w-12 items-center justify-center rounded-full border border-white/15 bg-slate-900/70 text-slate-200 shadow-xl backdrop-blur-xl transition duration-300 hover:border-cyan-500/50 hover:text-white sm:bottom-8 sm:right-8">
+        <span class="music-glyph flex items-center justify-center"><i data-lucide="music" class="h-5 w-5"></i></span>
+    </button>
+
     <main class="mx-auto max-w-5xl px-5 py-14 sm:px-8 md:py-20">
 
         <!-- ===== 头部 ===== -->
         <header class="glass reveal p-6 sm:p-8 md:p-10">
             <div class="flex flex-col gap-6 sm:flex-row sm:items-center">
-                <img src="头像.jpg" alt="王隆粮头像" loading="lazy" decoding="async"
+                <img src="images/头像.jpg" alt="王隆粮头像" loading="lazy" decoding="async"
                      class="h-20 w-20 flex-none rounded-2xl object-cover ring-1 ring-white/15 sm:h-24 sm:w-24">
 
                 <div class="min-w-0 flex-1">
@@ -512,7 +750,7 @@
                 </div>
                 <span class="accent-line ml-auto hidden sm:block"></span>
             </div>
-            <div id="skillsGrid" class="grid grid-cols-1 gap-5 md:grid-cols-2"></div>
+            <div id="skillsGrid" class="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3"></div>
         </section>
 
         <!-- ===== 教育 ===== -->
@@ -570,7 +808,7 @@
                     <span class="inline-flex items-center gap-2"><i data-lucide="message-circle" class="h-4 w-4 text-cyan-400"></i> wangll17170</span>
                     <span class="inline-flex min-w-0 items-center gap-2"><i data-lucide="mail" class="h-4 w-4 flex-none text-cyan-400"></i> <span id="emailDisplay" class="truncate">wanglongliang@outlook.com</span></span>
                 </div>
-                <p class="text-slate-500">&copy; 2026 王隆粮 · 构建于 <span id="buildDate"></span></p>
+                <p class="text-slate-500">&copy; 2026 王隆粮</p>
             </div>
         </footer>
 
@@ -594,16 +832,16 @@
                     wechat: 'wangll17170',
                     email: 'wanglongliang@outlook.com',
                 },
-                avatar: '头像.jpg',
+                avatar: 'images/头像.jpg',
                 /* ===== 个人作品：教师节礼物主题交互网站 ===== */
                 featured: {
                     name: 'SUPERNOVA · 超新星行星',
                     subtitle: '献给「百合老师」的教师节互动礼物',
                     url: 'https://wanglongliang8.netlify.app/',
-                    video: '1.mp4',
+                    video: 'videos/1.mp4',
                     videoLabel: '作品演示视频 · 45 秒',
                     concept: '把「祝福」翻译成宇宙尺度的视觉语言：星核在指尖被点燃，坍缩爆发为超新星，飞散的粒子重新聚合成一句句祝词——以星光的扩散隐喻师恩的传递。',
-                    tech: ['Three.js', 'GLSL 自定义着色器', 'MediaPipe HandLandmarker', 'WebGL 粒子系统', 'UnrealBloom 泛光后期', 'Afterimage 残影', 'Web Audio 生成式音频', '响应式布局', 'Netlify 部署'],
+                    tech: ['MediaPipe HandLandmarker', 'Web Audio 生成式音频', '响应式布局', 'Netlify 部署'],
                     stats: [{
                         num: '6',
                         label: '祝福段落',
@@ -689,10 +927,10 @@
                         org: '星辰 · 校园合伙人计划',
                         desc: '担任星辰校园合伙人，系统锻炼销售能力并同步运营个人数码自媒体账号。',
                         points: ['面向校园场景开展推广与销售实践，完成从触达到成单的完整闭环', '同步运营个人数码自媒体账号，负责选题、内容产出与账号维护', '在真实交易与内容运营中锻炼沟通表达、用户洞察与自我管理能力'],
-                        image: '实践.jpg',
+                        image: 'images/实践.jpg',
                         imageCaption: '个人数码自媒体账号运营记录',
                         imageTall: true,
-                        imageAr: '1255 / 2558'
+                        imageAr: '1256 / 2760'
                     }]
                 }],
                 projects: [{
@@ -711,17 +949,13 @@
                         title: '文博×AI 学习笔记',
                         stack: ['内容创作', '知识输出', '分享'],
                         desc: '系统整理文博与AI交叉领域的学习笔记，涵盖数字化保护、智慧博物馆、AI训练实践等主题，持续输出与迭代。',
+                        image: 'images/1.png',
+                        imageCaption: 'Obsidian 个人知识库 · 工作区截图',
+                        imageAr: '2880 / 1800',
                         link: '#'
                     }]
                 }],
                 skills: [{
-                    category: 'AI技术',
-                    items: [
-                        { name: '智能客服训练', level: 80 },
-                        { name: 'NLP基础', level: 60 },
-                        { name: '机器学习入门', level: 55 },
-                    ]
-                }, {
                     category: '工具与软件',
                     items: [
                         { name: 'PPT制作', level: 75 },
@@ -731,9 +965,9 @@
                 }, {
                     category: '领域知识',
                     items: [
-                        { name: '文物与博物馆学', level: 70 },
-                        { name: '数字化保护', level: 65 },
-                        { name: '文化遗产传播', level: 60 },
+                        { name: '文物与博物馆学', level: 2 },
+                        { name: '数字化保护', level: 5 },
+                        { name: '文化遗产传播', level: 3 },
                     ]
                 }, {
                     category: '软技能',
@@ -758,7 +992,7 @@
                     title: '达摩院人工智能训练师（初级）',
                     meta: '2026年7月 · 机器智能技术事业部',
                     desc: '完成智能客服AI训练师初级培训，认证合格。',
-                    image: '1.jpg',
+                    image: 'images/1.jpg',
                     credential: 'AIT260718193846000162',
                     wide: true
                 }, {
@@ -766,7 +1000,7 @@
                     title: '达摩院人工智能训练师（高级）',
                     meta: '2026年7月 · 机器智能技术事业部',
                     desc: '完成智能客服AI训练师高级培训，认证合格。',
-                    image: '2.jpg',
+                    image: 'images/2.jpg',
                     credential: 'AIT260718204057000108',
                     wide: true
                 }],
@@ -778,20 +1012,20 @@
                         desc: '生活里那些不设目标的时刻最让人放松。陪孩子玩一次抓娃娃机，看他专注地按下按钮、为一只玩偶雀跃或懊恼——耐心、专注与不轻易放弃，其实也是学习与做事最需要的东西。'
                     },
                     photos: [{
-                        src: '4.jpg',
+                        src: 'images/4.jpg',
                         caption: '抓娃娃机前的专注时刻',
                         ar: '3 / 4'
                     }, {
-                        src: '3.jpg',
+                        src: 'images/3.jpg',
                         caption: '家里的装修现场 · 参与其中',
                         ar: '3 / 4'
                     }, {
-                        src: '5.jpg',
+                        src: 'images/5.jpg',
                         caption: '久久公益节 · 大学生青年公益打卡行动',
                         ar: '1682 / 1190'
                     }],
                     video: {
-                        src: '2.mp4',
+                        src: 'videos/2.mp4',
                         icon: 'activity',
                         title: '个人风采 · 舞蹈展示',
                         meta: '21 秒 · 身体协调与全面发展',
@@ -805,9 +1039,13 @@
                     title: '下象棋',
                     meta: '爱好 · 逻辑思维锻炼',
                     desc: '爱好下象棋，虽棋艺不精但注重通过棋局锻炼逻辑思维能力。享受在有限的棋盘上推演攻防、权衡取舍的过程——每一步都要为后续若干步负责。',
-                    photos: ['6.jpg', '7.jpg']
-                }],
-                buildDate: new Date().toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' })
+                    startIndex: 2,
+                    gallery: [
+                        { src: 'images/6.jpg', caption: '象棋对局 · 专注思考的瞬间' },
+                        { src: 'images/7.jpg', caption: '棋盘推演 · 攻防与取舍的权衡' },
+                        { src: 'images/8.jpg', caption: '天天象棋 · 象棋业余等级证书 · 县级棋士 III', badge: 'award' }
+                    ]
+                }]
             };
 
             // ============================================================
@@ -816,7 +1054,9 @@
             function renderHeroTags() {
                 const el = document.getElementById('heroTags');
                 if (!el) return;
-                el.innerHTML = resume.tags.map(t => `<span class="tag">${t}</span>`).join('');
+                // 逐个淡入（竹简展开）：每个标签延迟 0.1s
+                el.innerHTML = resume.tags.map((t, i) =>
+                    `<span class="tag tag-unfold" style="animation-delay:${(i * 0.1).toFixed(1)}s">${t}</span>`).join('');
             }
 
             function renderHighlights() {
@@ -961,6 +1201,18 @@
                             ${item.stack.map(s => `<span class="tag">${s}</span>`).join('')}
                         </div>
                         ${item.link && item.link !== '#' ? `<a href="${item.link}" target="_blank" rel="noopener" class="mt-4 inline-flex w-fit items-center gap-1.5 text-sm font-medium text-cyan-400 transition hover:text-cyan-300 hover:gap-2.5">查看详情 <i data-lucide="arrow-up-right" class="h-4 w-4"></i></a>` : ''}
+                        ${item.image ? `
+                        <button type="button" class="zoom-trigger project-shot group relative mt-4 block w-full cursor-zoom-in overflow-hidden rounded-xl border border-white/10"
+                                data-zoom="${item.image}" data-zoom-title="${item.imageCaption || item.title}">
+                            <img src="${item.image}" alt="${item.imageCaption || item.title}" loading="lazy" decoding="async"
+                                 ${item.imageAr ? `style="aspect-ratio:${item.imageAr}"` : ''}
+                                 class="w-full object-cover transition duration-500 group-hover:scale-[1.02]">
+                            <span class="no-print pointer-events-none absolute inset-0 flex items-center justify-center bg-slate-950/0 opacity-0 transition duration-300 group-hover:bg-slate-950/45 group-hover:opacity-100">
+                                <span class="flex items-center gap-2 rounded-full border border-white/20 bg-slate-900/80 px-3.5 py-1.5 text-xs font-medium text-white backdrop-blur">
+                                    <i data-lucide="zoom-in" class="h-3.5 w-3.5"></i>点击放大查看
+                                </span>
+                            </span>
+                        </button>` : ''}
                     </article>`).join('')).join('');
             }
 
@@ -970,7 +1222,7 @@
                 el.innerHTML = resume.skills.map(group => `
                     <div class="glass glass-hover reveal p-6">
                         <h3 class="mb-5 flex items-center gap-2 text-base font-bold text-white">
-                            <span class="h-1.5 w-1.5 rounded-full bg-cyan-400 shadow-[0_0_8px_2px_rgba(34,211,238,0.7)]"></span>${group.category}
+                            <span class="h-1.5 w-1.5 rounded-full bg-cyan-400 shadow-[0_0_8px_2px_rgba(14,116,144,0.45)]"></span>${group.category}
                         </h3>
                         <div class="space-y-4">
                             ${group.items.map(item => `
@@ -1087,7 +1339,10 @@
             function renderHobbies() {
                 const el = document.getElementById('hobbiesGrid');
                 if (!el || !resume.hobbies) return;
-                el.innerHTML = resume.hobbies.map(h => `
+                el.innerHTML = resume.hobbies.map(h => {
+                    const slides = h.gallery || [];
+                    const start = Math.min(Math.max(h.startIndex || 0, 0), Math.max(slides.length - 1, 0));
+                    return `
                     <div class="glass glass-hover reveal overflow-hidden">
                         <div class="flex flex-col gap-5 p-6 sm:flex-row sm:items-start">
                             <span class="flex h-11 w-11 flex-none items-center justify-center rounded-xl border border-cyan-500/25 bg-cyan-500/10 text-cyan-300">
@@ -1099,17 +1354,43 @@
                                 <p class="mt-3 text-sm leading-6 text-slate-300">${h.desc}</p>
                             </div>
                         </div>
-                        <div class="grid grid-cols-2 gap-4 p-6 pt-0">
-                            ${(h.photos || []).map(src => `
-                                <img src="${src}" alt="${h.title}照片" loading="lazy" decoding="async"
-                                     class="aspect-[2/3] w-full rounded-xl border border-white/10 object-cover transition duration-500 hover:border-cyan-500/40">`).join('')}
-                        </div>
-                    </div>`).join('');
+                        ${slides.length ? `
+                        <div class="px-6 pb-6" data-gallery data-start="${start}">
+                            <div class="gallery-stage" tabindex="0" role="group"
+                                 aria-roledescription="轮播" aria-label="${h.title}照片浏览">
+                                ${slides.map(p => `
+                                <div class="gallery-slide" data-caption="${p.caption}"${p.badge ? ` data-badge="${p.badge}"` : ''}>
+                                    <button type="button" class="zoom-trigger group relative block h-full w-full cursor-zoom-in"
+                                            data-zoom="${p.src}" data-zoom-title="${p.caption}" aria-label="放大查看：${p.caption}">
+                                        <img src="${p.src}" alt="${p.caption}" loading="lazy" decoding="async" draggable="false">
+                                        <span class="no-print pointer-events-none absolute inset-0 flex items-center justify-center bg-slate-950/0 opacity-0 transition duration-300 group-hover:bg-slate-950/35 group-hover:opacity-100">
+                                            <span class="flex items-center gap-2 rounded-full border border-white/20 bg-slate-900/80 px-4 py-2 text-xs font-medium text-white backdrop-blur">
+                                                <i data-lucide="zoom-in" class="h-3.5 w-3.5"></i>点击放大查看
+                                            </span>
+                                        </span>
+                                    </button>
+                                </div>`).join('')}
+                                <button type="button" class="gallery-nav prev no-print" aria-label="上一张照片">
+                                    <i data-lucide="chevron-left" class="h-5 w-5"></i>
+                                </button>
+                                <button type="button" class="gallery-nav next no-print" aria-label="下一张照片">
+                                    <i data-lucide="chevron-right" class="h-5 w-5"></i>
+                                </button>
+                                <span class="gallery-counter no-print" aria-hidden="true"></span>
+                            </div>
+                            <div class="gallery-dots no-print">
+                                ${slides.map((p, i) => `<button type="button" class="gallery-dot" aria-label="查看第 ${i + 1} 张：${p.caption}"></button>`).join('')}
+                            </div>
+                            <div class="gallery-cap" aria-live="polite">
+                                <i data-lucide="award" class="gallery-badge h-3.5 w-3.5 flex-none text-cyan-400"></i>
+                                <span class="gallery-cap-text"></span>
+                            </div>
+                        </div>` : ''}
+                    </div>`;
+                }).join('');
             }
 
             function renderFooter() {
-                const el = document.getElementById('buildDate');
-                if (el) el.textContent = resume.buildDate;
                 const emailEl = document.getElementById('emailDisplay');
                 if (emailEl) emailEl.textContent = resume.contact.email;
             }
@@ -1168,6 +1449,151 @@
                 btn.addEventListener('click', () => {
                     copyText(btn.dataset.copyUrl, '🔗 作品链接已复制');
                 });
+            }
+
+            /* 象棋照片：平滑切换浏览（初始定位到第三张） */
+            function setupGalleries() {
+                document.querySelectorAll('[data-gallery]').forEach(g => {
+                    const slides = Array.from(g.querySelectorAll('.gallery-slide'));
+                    if (!slides.length) return;
+                    const dots = Array.from(g.querySelectorAll('.gallery-dot'));
+                    const counter = g.querySelector('.gallery-counter');
+                    const capText = g.querySelector('.gallery-cap-text');
+                    const badge = g.querySelector('.gallery-badge');
+                    const stage = g.querySelector('.gallery-stage');
+
+                    let idx = parseInt(g.dataset.start || '0', 10);
+                    if (!Number.isFinite(idx) || idx < 0 || idx >= slides.length) idx = 0;
+
+                    const paint = () => {
+                        slides.forEach((s, i) => s.classList.toggle('is-active', i === idx));
+                        dots.forEach((d, i) => d.classList.toggle('is-active', i === idx));
+                        if (counter) counter.textContent = (idx + 1) + ' / ' + slides.length;
+                        if (capText) capText.textContent = slides[idx].dataset.caption || '';
+                        if (badge) badge.style.display = slides[idx].dataset.badge ? '' : 'none';
+                    };
+                    const go = (n) => { idx = (n + slides.length) % slides.length; paint(); };
+
+                    g.querySelector('.gallery-nav.prev')?.addEventListener('click', () => go(idx - 1));
+                    g.querySelector('.gallery-nav.next')?.addEventListener('click', () => go(idx + 1));
+                    dots.forEach((d, i) => d.addEventListener('click', () => go(i)));
+
+                    /* 触屏左右滑动 */
+                    let sx = null;
+                    stage.addEventListener('touchstart', (e) => { sx = e.touches[0].clientX; }, { passive: true });
+                    stage.addEventListener('touchend', (e) => {
+                        if (sx === null) return;
+                        const dx = e.changedTouches[0].clientX - sx;
+                        sx = null;
+                        if (Math.abs(dx) > 40) go(dx < 0 ? idx + 1 : idx - 1);
+                    }, { passive: true });
+
+                    /* 键盘左右方向键 */
+                    stage.addEventListener('keydown', (e) => {
+                        if (e.key === 'ArrowLeft') { e.preventDefault(); go(idx - 1); }
+                        if (e.key === 'ArrowRight') { e.preventDefault(); go(idx + 1); }
+                    });
+
+                    paint();
+                });
+            }
+
+            /* 背景音乐：播放本地 lucky.mp3（循环 · 音量平滑淡入淡出 · 默认关闭） */
+            function setupMusic() {
+                const btn = document.getElementById('musicToggle');
+                const audio = document.getElementById('bgm');
+                if (!btn || !audio) return;
+
+                const TARGET = 0.5;    // 背景音量：清晰可闻但不喧宾夺主
+                const FADE_IN = 2.5;   // 淡入时长（秒）
+                const FADE_OUT = 1.2;  // 淡出时长（秒）
+                let raf = null, playing = false;
+
+                audio.loop = true;
+                audio.volume = 0;
+
+                /* smoothstep 缓动渐变音量，避免生硬突入或骤停 */
+                function fadeTo(to, seconds, done) {
+                    if (raf) cancelAnimationFrame(raf);
+                    const from = audio.volume;
+                    const t0 = performance.now();
+                    const dur = Math.max(seconds * 1000, 16);
+                    const step = (now) => {
+                        const p = Math.min((now - t0) / dur, 1);
+                        const e = p * p * (3 - 2 * p);
+                        audio.volume = Math.min(1, Math.max(0, from + (to - from) * e));
+                        if (p < 1) {
+                            raf = requestAnimationFrame(step);
+                        } else {
+                            raf = null;
+                            if (done) done();
+                        }
+                    };
+                    raf = requestAnimationFrame(step);
+                }
+
+                function setUI(on) {
+                    btn.classList.toggle('is-on', on);
+                    btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+                    btn.setAttribute('aria-label', on ? '关闭背景音乐' : '开启背景音乐');
+                    btn.title = on ? '背景音乐：播放中（点击关闭）' : '背景音乐：点击开启（柔和淡入）';
+                    const wrap = btn.querySelector('.music-glyph');
+                    if (wrap) wrap.innerHTML = '<i data-lucide="' + (on ? 'volume-2' : 'music') + '" class="h-5 w-5"></i>';
+                    if (window.lucide) lucide.createIcons();
+                }
+
+                function play() {
+                    if (playing) return;
+                    playing = true;
+                    setUI(true);
+                    fadeTo(TARGET, FADE_IN);
+                    const p = audio.play();
+                    if (p && p.catch) {
+                        p.catch(() => {
+                            playing = false;
+                            audio.volume = 0;
+                            setUI(false);
+                            showToast('🎵 背景音乐加载失败，请确认 lucky.mp3 与简历在同一目录');
+                        });
+                    }
+                }
+
+                function pause() {
+                    if (!playing) return;
+                    playing = false;
+                    setUI(false);
+                    fadeTo(0, FADE_OUT, () => audio.pause());
+                }
+
+                /* 打开页面即尝试自动播放；若被浏览器策略拦截，则在首次任意交互时自动接管 */
+                function autostart() {
+                    const events = ['pointerdown', 'touchstart', 'keydown', 'wheel'];
+                    const onFirst = (e) => {
+                        if (e.target && e.target.closest && e.target.closest('#musicToggle')) return; // 交给按钮自身处理
+                        events.forEach(t => window.removeEventListener(t, onFirst, true));
+                        play();
+                    };
+                    const armFallback = () => events.forEach(t => window.addEventListener(t, onFirst, true));
+
+                    audio.volume = 0;                 // 先归零，确保任何时候都不会突然以满音量出声
+                    const p = audio.play();
+                    if (!p || !p.then) { play(); return; }
+                    p.then(() => {
+                        playing = true;
+                        setUI(true);
+                        audio.volume = 0;
+                        fadeTo(TARGET, FADE_IN);
+                    }).catch(() => {
+                        playing = false;
+                        audio.volume = 0;
+                        setUI(false);
+                        armFallback();
+                    });
+                }
+
+                btn.addEventListener('click', () => { playing ? pause() : play(); });
+                setUI(true);   // 打开页面即按"自动播放"预期显示为播放态
+                autostart();
             }
 
             function setupLightbox() {
@@ -1265,6 +1691,8 @@
                 setupContact();
                 setupLightbox();
                 setupWorkCopy();
+                setupGalleries();
+                setupMusic();
                 document.getElementById('printBtn')?.addEventListener('click', () => window.print());
 
                 if (window.lucide) lucide.createIcons();
@@ -1276,6 +1704,979 @@
                 init();
             }
 
+        })();
+    </script>
+
+    <script>
+        /* ============================================================
+           未来科技能量核心动态背景（canvas 单文件实现，无外部依赖）
+           构成：深空底 + 能量云 + 电路纹理/HUD/发光回纹边框 + 数据脉冲沿电路流动 +
+                 数字雨 + 多层旋转几何环 + 能量核心（体积光/镜头光晕/脉冲环）+
+                 数据流粒子 + 扫描线 + 故障艺术 RGB 分离 + 暗角。
+           - 桌面端与手机端运行同一套动效（仅排版随屏宽变化）；
+           - 「减少动态效果」偏好下只绘制一帧静态画面，不启动动画循环；
+           - 打印时随 .bg-scene 一起隐藏（见 @media print）。
+           ============================================================ */
+        (function () {
+            const cvs = document.getElementById('bgCanvas');
+            if (!cvs) return;
+            const ctx = cvs.getContext('2d', { alpha: false });
+
+            /* 三色主调：霓虹青 / 电光蓝 / 品红 */
+            const HUES = {
+              CY: '34, 232, 255',
+              BL: '43, 107, 255',
+              MG: '255, 43, 214',
+              RD: '255, 72, 72'
+            };
+
+            const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+            let W = 0, H = 0, Rm = 0, DPR = 1, T = 0, LOWP = false;
+            let last = performance.now();
+
+            let staticLayer, vigLayer;         // 静态电路 / HUD / 回纹边框层，暗角层
+            const SP = {};                     // 预渲染精灵（避免每帧 shadowBlur）
+            let traces = [];                   // 电路折线（归一化坐标，便于自适应复用）
+            let pulses = [];                   // 沿电路流动的数据脉冲
+            let rain = [];                     // 数字雨柱
+            let parts = [];                    // 数据流粒子
+            let clouds = [];                   // 能量云
+
+            let glitchLeft = 0, glitchNext = 2.2;
+
+            const rand = (a, b) => a + Math.random() * (b - a);
+
+            /* ============================================================
+               一、精灵预渲染：所有"发光"都用渐变贴图，不用 shadowBlur
+               ============================================================ */
+            function makeGlow(size, stops) {
+              const c = document.createElement('canvas');
+              c.width = c.height = size;
+              const g = c.getContext('2d');
+              const r = size / 2;
+              const grd = g.createRadialGradient(r, r, 0, r, r, r);
+              stops.forEach(s => grd.addColorStop(s[0], s[1]));
+              g.fillStyle = grd;
+              g.beginPath();
+              g.arc(r, r, r, 0, Math.PI * 2);
+              g.fill();
+              return c;
+            }
+
+            /* 核心柔光（可直接改色，用于故障 RGB 分离的三通道） */
+            function makeCore(size, hue, power) {
+              return makeGlow(size, [
+                [0, 'rgba(235, 255, 255, ' + power + ')'],
+                [0.16, 'rgba(' + hue + ', ' + (power * 0.86) + ')'],
+                [0.42, 'rgba(' + hue + ', ' + (power * 0.34) + ')'],
+                [0.72, 'rgba(' + hue + ', ' + (power * 0.09) + ')'],
+                [1, 'rgba(' + hue + ', 0)']
+              ]);
+            }
+
+            /* 体积光光柱（横向楔形渐变） */
+            function makeRay() {
+              const w = 256, h = 64;
+              const c = document.createElement('canvas');
+              c.width = w; c.height = h;
+              const g = c.getContext('2d');
+              const grd = g.createLinearGradient(0, 0, w, 0);
+              grd.addColorStop(0, 'rgba(200, 252, 255, 0.55)');
+              grd.addColorStop(0.30, 'rgba(34, 232, 255, 0.17)');
+              grd.addColorStop(1, 'rgba(34, 232, 255, 0)');
+              g.fillStyle = grd;
+              g.beginPath();
+              g.moveTo(0, h / 2);
+              g.lineTo(w, 0);
+              g.lineTo(w, h);
+              g.closePath();
+              g.fill();
+              return c;
+            }
+
+            /* 镜头光晕横条 */
+            function makeFlare() {
+              const w = 512, h = 64;
+              const c = document.createElement('canvas');
+              c.width = w; c.height = h;
+              const g = c.getContext('2d');
+              g.save();
+              g.translate(w / 2, h / 2);
+              g.scale(1, 0.11);
+              const grd = g.createRadialGradient(0, 0, 0, 0, 0, w / 2);
+              grd.addColorStop(0, 'rgba(225, 255, 255, 0.55)');
+              grd.addColorStop(0.30, 'rgba(34, 232, 255, 0.18)');
+              grd.addColorStop(0.70, 'rgba(43, 107, 255, 0.06)');
+              grd.addColorStop(1, 'rgba(34, 232, 255, 0)');
+              g.fillStyle = grd;
+              g.beginPath();
+              g.arc(0, 0, w / 2, 0, Math.PI * 2);
+              g.fill();
+              g.restore();
+              return c;
+            }
+
+            /* 扫描线光带（纵向渐变，横向拉伸使用） */
+            function makeBand() {
+              const h = 128;
+              const c = document.createElement('canvas');
+              c.width = 8; c.height = h;
+              const g = c.getContext('2d');
+              const grd = g.createLinearGradient(0, 0, 0, h);
+              grd.addColorStop(0, 'rgba(34, 232, 255, 0)');
+              grd.addColorStop(0.42, 'rgba(150, 244, 255, 0.34)');
+              grd.addColorStop(0.5, 'rgba(215, 255, 255, 0.5)');
+              grd.addColorStop(0.58, 'rgba(34, 232, 255, 0.32)');
+              grd.addColorStop(1, 'rgba(34, 232, 255, 0)');
+              g.fillStyle = grd;
+              g.fillRect(0, 0, 8, h);
+              return c;
+            }
+
+            function buildSprites() {
+              SP.glow = {
+                CY: makeGlow(128, [[0, 'rgba(210,255,255,0.95)'], [0.26, 'rgba(34,232,255,0.55)'], [1, 'rgba(34,232,255,0)']]),
+                BL: makeGlow(128, [[0, 'rgba(200,222,255,0.95)'], [0.26, 'rgba(43,107,255,0.55)'], [1, 'rgba(43,107,255,0)']]),
+                MG: makeGlow(128, [[0, 'rgba(255,214,246,0.95)'], [0.26, 'rgba(255,43,214,0.52)'], [1, 'rgba(255,43,214,0)']])
+              };
+              SP.core = {
+                CY: makeCore(512, HUES.CY, 0.62),
+                MG: makeCore(512, HUES.MG, 0.5),
+                BL: makeCore(512, HUES.BL, 0.5),
+                RD: makeCore(512, HUES.RD, 0.5)
+              };
+              SP.hot = makeGlow(256, [
+                [0, 'rgba(255,255,255,0.95)'],
+                [0.30, 'rgba(226,255,255,0.42)'],
+                [1, 'rgba(180,245,255,0)']
+              ]);
+              SP.blob = {
+                CY: makeGlow(256, [[0, 'rgba(34,232,255,0.34)'], [0.42, 'rgba(34,232,255,0.13)'], [1, 'rgba(34,232,255,0)']]),
+                BL: makeGlow(256, [[0, 'rgba(43,107,255,0.30)'], [0.42, 'rgba(43,107,255,0.11)'], [1, 'rgba(43,107,255,0)']]),
+                MG: makeGlow(256, [[0, 'rgba(255,43,214,0.22)'], [0.42, 'rgba(255,43,214,0.08)'], [1, 'rgba(255,43,214,0)']])
+              };
+              SP.ray = makeRay();
+              SP.flare = makeFlare();
+              SP.band = makeBand();
+            }
+
+            /* ============================================================
+               二、电路折线：网格随机游走，供静态纹理与数据脉冲共用
+               ============================================================ */
+            function turnDir(d) {
+              return d < 2 ? (Math.random() < 0.5 ? 2 : 3) : (Math.random() < 0.5 ? 0 : 1);
+            }
+
+            function genTraces() {
+              const gx = 8, gy = 10;
+              const count = LOWP ? 14 : 26;
+              const list = [];
+              for (let i = 0; i < count; i++) {
+                let x = Math.floor(Math.random() * (gx + 1));
+                let y = Math.floor(Math.random() * (gy + 1));
+                let dir = Math.random() < 0.5 ? (Math.random() < 0.5 ? 0 : 1) : (Math.random() < 0.5 ? 2 : 3);
+                const pts = [{ x: x / gx, y: y / gy }];
+                const steps = 3 + Math.floor(Math.random() * 6);
+                for (let s = 0; s < steps; s++) {
+                  const len = 1 + Math.floor(Math.random() * 3);
+                  if (dir === 0) x += len; else if (dir === 1) x -= len;
+                  else if (dir === 2) y += len; else y -= len;
+                  x = Math.max(0, Math.min(gx, x));
+                  y = Math.max(0, Math.min(gy, y));
+                  pts.push({ x: x / gx, y: y / gy });
+                  if (Math.random() < 0.8) dir = turnDir(dir);
+                }
+                if (pts.length > 2) list.push(pts);
+              }
+              return list;
+            }
+
+            /* ============================================================
+               三、回纹（方胜纹）单元：发光电路回纹边框的基本笔画
+               ============================================================ */
+            function meander(g, x, y, s) {
+              g.beginPath();
+              g.moveTo(x, y + s);
+              g.lineTo(x, y);
+              g.lineTo(x + s, y);
+              g.lineTo(x + s, y + s);
+              g.lineTo(x + s * 0.40, y + s);
+              g.lineTo(x + s * 0.40, y + s * 0.40);
+              g.lineTo(x + s * 0.72, y + s * 0.40);
+              g.lineTo(x + s * 0.72, y + s * 0.72);
+              g.stroke();
+            }
+
+            function buildFretBorder(g) {
+              const inset = Math.max(16, Math.min(W, H) * 0.042);
+              const s = Math.max(7, Math.min(16, Math.min(W, H) * 0.018));
+              const unit = s * 2;
+
+              /* 内外两圈细框，强化"边框"结构感 */
+              g.lineWidth = 1;
+              g.strokeStyle = 'rgba(' + HUES.CY + ', 0.14)';
+              g.strokeRect(inset * 0.46, inset * 0.46, W - inset * 0.92, H - inset * 0.92);
+              g.strokeStyle = 'rgba(' + HUES.CY + ', 0.08)';
+              g.strokeRect(inset * 1.30, inset * 1.30, W - inset * 2.60, H - inset * 2.60);
+
+              /* 回纹带：上下左右四条，用双描（粗低透明 + 细高亮）模拟辉光 */
+              const bands = [
+                { ox: 0, oy: inset, rot: 0, len: W },
+                { ox: 0, oy: H - inset - s, rot: 0, len: W },
+                { ox: inset, oy: 0, rot: Math.PI / 2, len: H },
+                { ox: W - inset - s, oy: 0, rot: Math.PI / 2, len: H }
+              ];
+
+              bands.forEach(function (b) {
+                g.save();
+                g.translate(b.ox, b.oy);
+                if (b.rot) g.rotate(b.rot);
+                const n = Math.ceil(b.len / unit) + 1;
+                /* 粗光晕 */
+                g.lineWidth = Math.max(3, s * 0.30);
+                g.strokeStyle = 'rgba(' + HUES.CY + ', 0.13)';
+                for (let i = -1; i < n; i++) meander(g, i * unit, 0, s);
+                /* 细亮线 */
+                g.lineWidth = Math.max(1, s * 0.10);
+                g.strokeStyle = 'rgba(185, 250, 255, 0.42)';
+                for (let i = -1; i < n; i++) meander(g, i * unit, 0, s);
+                g.restore();
+              });
+
+              /* 四角角标 */
+              const corner = Math.min(W, H) * 0.075;
+              const strokeCorner = function (fx, fy, sx, sy) {
+                g.beginPath();
+                g.moveTo(fx, fy + sy * corner);
+                g.lineTo(fx, fy);
+                g.lineTo(fx + sx * corner, fy);
+                g.stroke();
+              };
+              g.lineWidth = 2;
+              g.strokeStyle = 'rgba(' + HUES.CY + ', 0.42)';
+              strokeCorner(inset * 1.9, inset * 1.9, 1, 1);
+              strokeCorner(W - inset * 1.9, inset * 1.9, -1, 1);
+              strokeCorner(inset * 1.9, H - inset * 1.9, 1, -1);
+              strokeCorner(W - inset * 1.9, H - inset * 1.9, -1, -1);
+            }
+
+            /* ============================================================
+               四、静态层：点阵 / 电路 / HUD / 回纹边框 / 扫描线
+               ============================================================ */
+            function buildStatic() {
+              staticLayer = document.createElement('canvas');
+              staticLayer.width = Math.round(W * DPR);
+              staticLayer.height = Math.round(H * DPR);
+              const g = staticLayer.getContext('2d');
+              g.scale(DPR, DPR);
+
+              /* 稀疏点阵：电路板肌理 */
+              const step = 46;
+              g.fillStyle = 'rgba(' + HUES.CY + ', 0.075)';
+              for (let y = step; y < H; y += step) {
+                for (let x = step; x < W; x += step) {
+                  g.fillRect(x, y, 1.2, 1.2);
+                }
+              }
+
+              /* 电路走线 + 过孔节点 */
+              traces = genTraces();
+              traces.forEach(function (pts) {
+                const px = pts.map(p => ({ x: p.x * W, y: p.y * H }));
+                g.beginPath();
+                for (let i = 0; i < px.length; i++) {
+                  if (i === 0) g.moveTo(px[i].x, px[i].y);
+                  else g.lineTo(px[i].x, px[i].y);
+                }
+                g.lineWidth = 3.2;
+                g.strokeStyle = 'rgba(' + HUES.CY + ', 0.055)';
+                g.stroke();
+                g.lineWidth = 1;
+                g.strokeStyle = 'rgba(' + HUES.CY + ', 0.20)';
+                g.stroke();
+
+                g.fillStyle = 'rgba(190, 250, 255, 0.26)';
+                px.forEach(function (p) {
+                  g.fillRect(p.x - 1.6, p.y - 1.6, 3.2, 3.2);
+                });
+                /* 端点焊盘 */
+                g.strokeStyle = 'rgba(' + HUES.BL + ', 0.30)';
+                g.lineWidth = 1;
+                const last = px[px.length - 1];
+                g.strokeRect(last.x - 4.5, last.y - 4.5, 9, 9);
+              });
+
+              /* HUD 元素（无文字，仅刻度 / 弧 / 括号 / 方块） */
+              const m = Math.min(W, H);
+              g.lineWidth = 1;
+              g.strokeStyle = 'rgba(' + HUES.CY + ', 0.12)';
+              for (let x = 30; x < W - 20; x += 30) {
+                g.beginPath(); g.moveTo(x, 6); g.lineTo(x, 6 + (x % 90 === 0 ? 11 : 6)); g.stroke();
+                g.beginPath(); g.moveTo(x, H - 6); g.lineTo(x, H - 6 - (x % 90 === 0 ? 11 : 6)); g.stroke();
+              }
+              for (let y = 30; y < H - 20; y += 30) {
+                g.beginPath(); g.moveTo(6, y); g.lineTo(6 + (y % 90 === 0 ? 11 : 6), y); g.stroke();
+                g.beginPath(); g.moveTo(W - 6, y); g.lineTo(W - 6 - (y % 90 === 0 ? 11 : 6), y); g.stroke();
+              }
+
+              /* 虚线弧组（左上 / 右下），手工分段以避开 setLineDash 开销 */
+              const arcAt = function (cx, cy, r, a0, a1, segs, rgb, alpha) {
+                g.strokeStyle = 'rgba(' + rgb + ', ' + alpha + ')';
+                for (let i = 0; i < segs; i++) {
+                  const t0 = a0 + (a1 - a0) * (i / segs);
+                  const t1 = a0 + (a1 - a0) * ((i + 0.55) / segs);
+                  g.beginPath();
+                  g.arc(cx, cy, r, t0, t1);
+                  g.stroke();
+                }
+              };
+              arcAt(m * 0.30, m * 0.30, m * 0.145, -0.2, 1.35, 9, HUES.CY, 0.16);
+              arcAt(m * 0.30, m * 0.30, m * 0.185, 0.1, 1.55, 11, HUES.BL, 0.12);
+              arcAt(m * 0.30, m * 0.30, m * 0.225, -0.3, 0.9, 7, HUES.MG, 0.09);
+              arcAt(W - m * 0.26, H - m * 0.26, m * 0.13, 2.6, 4.9, 9, HUES.CY, 0.14);
+              arcAt(W - m * 0.26, H - m * 0.26, m * 0.175, 2.8, 5.2, 11, HUES.MG, 0.10);
+
+              /* 十字准星 */
+              const cross = function (cx, cy, r) {
+                g.strokeStyle = 'rgba(185, 250, 255, 0.22)';
+                g.beginPath(); g.arc(cx, cy, r, 0, Math.PI * 2); g.stroke();
+                g.beginPath(); g.moveTo(cx - r * 1.7, cy); g.lineTo(cx - r * 0.5, cy); g.stroke();
+                g.beginPath(); g.moveTo(cx + r * 0.5, cy); g.lineTo(cx + r * 1.7, cy); g.stroke();
+                g.beginPath(); g.moveTo(cx, cy - r * 1.7); g.lineTo(cx, cy - r * 0.5); g.stroke();
+                g.beginPath(); g.moveTo(cx, cy + r * 0.5); g.lineTo(cx, cy + r * 1.7); g.stroke();
+              };
+              cross(W * 0.16, H * 0.78, 7);
+              cross(W * 0.86, H * 0.22, 6);
+
+              /* 能量计量条（只有条，没有数字） */
+              g.fillStyle = 'rgba(' + HUES.CY + ', 0.20)';
+              for (let i = 0; i < 14; i++) {
+                const bh = 5 + (i % 4) * 4;
+                g.fillRect(W * 0.07 + i * 9, H * 0.90 - bh, 4, bh);
+              }
+              g.fillStyle = 'rgba(' + HUES.MG + ', 0.18)';
+              for (let i = 0; i < 9; i++) {
+                const bh = 4 + (i % 3) * 5;
+                g.fillRect(W * 0.86 - i * 9, H * 0.10, 4, bh);
+              }
+
+              /* 大六边形轮廓 */
+              g.strokeStyle = 'rgba(' + HUES.CY + ', 0.075)';
+              g.lineWidth = 1;
+              g.beginPath();
+              for (let i = 0; i < 6; i++) {
+                const a = -Math.PI / 2 + i * Math.PI / 3;
+                const px = W * 0.5 + Math.cos(a) * m * 0.40;
+                const py = H * 0.5 + Math.sin(a) * m * 0.40;
+                if (i === 0) g.moveTo(px, py); else g.lineTo(px, py);
+              }
+              g.closePath();
+              g.stroke();
+
+              /* 回纹发光边框（最后画，压在其它纹理之上） */
+              buildFretBorder(g);
+
+              /* 极淡横向扫描线纹理（CRT 感） */
+              g.fillStyle = 'rgba(140, 220, 255, 0.030)';
+              for (let y = 0; y < H; y += 3) g.fillRect(0, y, W, 1);
+            }
+
+            function buildVignette() {
+              vigLayer = document.createElement('canvas');
+              vigLayer.width = Math.round(W * DPR);
+              vigLayer.height = Math.round(H * DPR);
+              const g = vigLayer.getContext('2d');
+              g.scale(DPR, DPR);
+              const grd = g.createRadialGradient(W / 2, H / 2, Math.min(W, H) * 0.22, W / 2, H / 2, Math.max(W, H) * 0.78);
+              grd.addColorStop(0, 'rgba(0, 0, 0, 0)');
+              grd.addColorStop(0.62, 'rgba(0, 0, 0, 0.16)');
+              grd.addColorStop(1, 'rgba(0, 0, 0, 0.72)');
+              g.fillStyle = grd;
+              g.fillRect(0, 0, W, H);
+            }
+
+            /* ============================================================
+               五、能量云：缓慢漂移的巨大柔光团
+               ============================================================ */
+            function layoutClouds() {
+              clouds = [];
+              const keys = ['CY', 'BL', 'MG', 'CY', 'BL'];
+              for (let i = 0; i < keys.length; i++) {
+                clouds.push({
+                  hue: keys[i],
+                  x: (0.16 + 0.72 * (i / (keys.length - 1))) * W + rand(-0.06, 0.06) * W,
+                  y: (0.18 + 0.62 * Math.random()) * H,
+                  r: Math.min(W, H) * rand(0.42, 0.72),
+                  sp: rand(0.035, 0.085),
+                  ph: rand(0, Math.PI * 2),
+                  amp: rand(0.04, 0.10),
+                  a: rand(0.55, 1.0)
+                });
+              }
+            }
+
+            function drawClouds() {
+              const pulse = 0.5 + 0.5 * Math.sin(T * 0.32);
+              ctx.globalCompositeOperation = 'lighter';
+              clouds.forEach(function (c) {
+                const x = c.x + Math.sin(T * c.sp + c.ph) * W * c.amp;
+                const y = c.y + Math.cos(T * c.sp * 0.83 + c.ph) * H * c.amp * 0.7;
+                const d = c.r * (1 + 0.06 * Math.sin(T * c.sp * 1.7 + c.ph));
+                ctx.globalAlpha = 0.32 * c.a * (0.72 + 0.28 * pulse);
+                ctx.drawImage(SP.blob[c.hue], x - d / 2, y - d / 2, d, d);
+              });
+              ctx.globalAlpha = 1;
+              ctx.globalCompositeOperation = 'source-over';
+            }
+
+            /* ============================================================
+               六、数字雨：无字形的数据条柱
+               ============================================================ */
+            function layoutRain() {
+              rain = [];
+              let n = Math.max(9, Math.min(24, Math.round(W / 76)));
+              if (LOWP) n = Math.max(8, Math.round(n * 0.68));
+              const grid = W / n;
+              for (let i = 0; i < n; i++) {
+                const r = Math.random();
+                rain.push({
+                  x: i * grid + grid * 0.5 + rand(-1.5, 1.5),
+                  y: rand(-H * 0.8, H),
+                  v: rand(70, 210),
+                  len: 7 + Math.floor(Math.random() * 9),
+                  gap: 9 + Math.random() * 6,
+                  w: 1.8 + Math.random() * 2.2,
+                  hue: r < 0.62 ? HUES.CY : (r < 0.88 ? HUES.BL : HUES.MG),
+                  a: rand(0.22, 0.5)
+                });
+              }
+            }
+
+            function drawRain(dt) {
+              const breathe = 0.85 + 0.15 * Math.sin(T * 0.5);
+              for (let i = 0; i < rain.length; i++) {
+                const c = rain[i];
+                c.y += c.v * dt;
+                const tail = c.len * c.gap;
+                if (c.y - tail > H) {
+                  c.y = rand(-H * 0.55, -20);
+                  c.v = rand(70, 210);
+                }
+                const h = c.gap * 0.55;
+                ctx.fillStyle = 'rgb(' + c.hue + ')';
+                for (let k = 0; k < c.len; k++) {
+                  const yy = c.y - k * c.gap;
+                  if (yy < -h || yy > H) continue;
+                  const f = 1 - k / c.len;
+                  /* 头部最亮，尾部迅速衰减 —— 形成数据流拖尾 */
+                  ctx.globalAlpha = c.a * breathe * f * f;
+                  ctx.fillRect(c.x, yy, c.w, h);
+                }
+              }
+              ctx.globalAlpha = 1;
+            }
+
+            /* ============================================================
+               七、数据脉冲：沿电路走线流动的光点
+               ============================================================ */
+            function traceAt(pts, s) {
+              /* s 为归一化行程 0..1，返回像素坐标与该段方向 */
+              let total = 0;
+              const seg = [];
+              for (let i = 1; i < pts.length; i++) {
+                const dx = (pts[i].x - pts[i - 1].x) * W;
+                const dy = (pts[i].y - pts[i - 1].y) * H;
+                const len = Math.hypot(dx, dy);
+                seg.push(len);
+                total += len;
+              }
+              let target = s * total;
+              for (let i = 0; i < seg.length; i++) {
+                if (target <= seg[i] || i === seg.length - 1) {
+                  const t = seg[i] > 0 ? target / seg[i] : 0;
+                  const x0 = pts[i].x * W, y0 = pts[i].y * H;
+                  const x1 = pts[i + 1].x * W, y1 = pts[i + 1].y * H;
+                  return { x: x0 + (x1 - x0) * t, y: y0 + (y1 - y0) * t, ux: (x1 - x0) / (seg[i] || 1), uy: (y1 - y0) / (seg[i] || 1) };
+                }
+                target -= seg[i];
+              }
+              const l = pts[pts.length - 1];
+              return { x: l.x * W, y: l.y * H, ux: 1, uy: 0 };
+            }
+
+            function layoutPulses() {
+              pulses = [];
+              const n = LOWP ? 9 : 15;
+              for (let i = 0; i < n; i++) {
+                pulses.push({
+                  ti: Math.floor(Math.random() * traces.length),
+                  s: Math.random(),
+                  v: rand(0.10, 0.26),
+                  size: rand(12, 26),
+                  hue: Math.random() < 0.7 ? 'CY' : (Math.random() < 0.5 ? 'BL' : 'MG'),
+                  ph: rand(0, Math.PI * 2)
+                });
+              }
+            }
+
+            function drawPulses(dt) {
+              ctx.globalCompositeOperation = 'lighter';
+              for (let i = 0; i < pulses.length; i++) {
+                const p = pulses[i];
+                const pts = traces[p.ti];
+                if (!pts) continue;
+                p.s += p.v * dt;
+                if (p.s > 1) { p.s -= 1; p.hue = Math.random() < 0.7 ? 'CY' : 'MG'; }
+                const pt = traceAt(pts, p.s);
+                const flick = 0.65 + 0.35 * Math.sin(T * 3 + p.ph);
+                /* 拖尾：沿反方向递减绘点，形成动态模糊感 */
+                for (let k = 0; k < 5; k++) {
+                  const back = p.size * k * 1.5;
+                  const d = p.size * (1 - k * 0.13) * 2.6;
+                  ctx.globalAlpha = 0.42 * (1 - k / 5) * flick;
+                  ctx.drawImage(SP.glow[p.hue], pt.x - pt.ux * back - d / 2, pt.y - pt.uy * back - d / 2, d, d);
+                }
+                ctx.globalAlpha = 0.7 * flick;
+                ctx.fillStyle = 'rgb(' + HUES.CY + ')';
+                ctx.fillRect(pt.x - 1.1, pt.y - 1.1, 2.2, 2.2);
+              }
+              ctx.globalAlpha = 1;
+              ctx.globalCompositeOperation = 'source-over';
+            }
+
+            /* ============================================================
+               八、旋转几何环 + 能量核心（含脉冲、体积光、镜头光晕）
+               ============================================================ */
+            function dashRing(g, r, rot, n, fill, rgb, alpha, lw) {
+              g.strokeStyle = 'rgba(' + rgb + ', ' + alpha + ')';
+              g.lineWidth = lw;
+              const step = Math.PI * 2 / n;
+              for (let i = 0; i < n; i++) {
+                const a0 = rot + i * step;
+                g.beginPath();
+                g.arc(0, 0, r, a0, a0 + step * fill);
+                g.stroke();
+              }
+            }
+
+            function polyRing(g, r, n, rot, rgb, alpha, lw) {
+              g.strokeStyle = 'rgba(' + rgb + ', ' + alpha + ')';
+              g.lineWidth = lw;
+              g.beginPath();
+              for (let i = 0; i <= n; i++) {
+                const a = rot - Math.PI / 2 + (i / n) * Math.PI * 2;
+                const px = Math.cos(a) * r, py = Math.sin(a) * r;
+                if (i === 0) g.moveTo(px, py); else g.lineTo(px, py);
+              }
+              g.stroke();
+            }
+
+            function drawRings(mono, dt) {
+              const cx = W * 0.5, cy = H * 0.5;
+              const pulse = 0.5 + 0.5 * Math.sin(T * 0.55);
+              const R = Rm * 0.5;
+
+              ctx.save();
+              ctx.translate(cx, cy);
+              ctx.globalCompositeOperation = 'lighter';
+
+              const H1 = mono ? mono : 'CY';
+              const H2 = mono ? mono : 'BL';
+              const H3 = mono ? mono : 'MG';
+
+              /* 外圈：细密刻度环 */
+              dashRing(ctx, R * 0.84, T * 0.06, 120, 0.42, H1, 0.20 + 0.14 * pulse, 1.2);
+              /* 反向虚线环 */
+              dashRing(ctx, R * 0.72, -T * 0.09, 72, 0.26, H2, 0.18 + 0.10 * pulse, 1.6);
+              /* 大间距弧段 */
+              dashRing(ctx, R * 0.94, -T * 0.03, 6, 0.72, H2, 0.10, 1.0);
+              /* 多边形环：八边形 + 三角形 */
+              polyRing(ctx, R * 0.60, 8, T * 0.05, H3, 0.14 + 0.08 * pulse, 1.0);
+              polyRing(ctx, R * 0.92, 3, -T * 0.04, H1, 0.11, 1.0);
+              /* 内圈刻度（短径向线） */
+              ctx.strokeStyle = 'rgba(' + HUES.CY + ', ' + (0.22 + 0.16 * pulse) + ')';
+              ctx.lineWidth = 1.2;
+              for (let i = 0; i < 48; i++) {
+                const a = T * 0.13 + i * Math.PI * 2 / 48;
+                const c = Math.cos(a), s = Math.sin(a);
+                const r0 = R * 0.50, r1 = R * (i % 4 === 0 ? 0.56 : 0.53);
+                ctx.beginPath();
+                ctx.moveTo(c * r0, s * r0);
+                ctx.lineTo(c * r1, s * r1);
+                ctx.stroke();
+              }
+              /* 扫描指针：一段旋转的亮弧 */
+              ctx.strokeStyle = 'rgba(215, 255, 255, ' + (0.22 + 0.22 * pulse) + ')';
+              ctx.lineWidth = 2.4;
+              ctx.beginPath();
+              ctx.arc(0, 0, R * 0.66, T * 0.42, T * 0.42 + 0.30);
+              ctx.stroke();
+              ctx.restore();
+            }
+
+            function drawCoreGlow(mono) {
+              const cx = W * 0.5, cy = H * 0.5;
+              const pulse = 0.5 + 0.5 * Math.sin(T * 0.55);
+              const breathe = 0.88 + 0.12 * Math.sin(T * 0.9);
+              const R = Rm * 0.5;
+
+              ctx.globalCompositeOperation = 'lighter';
+
+              /* 体积光：环绕核心的楔形光柱 */
+              const rays = LOWP ? 10 : 14;
+              for (let i = 0; i < rays; i++) {
+                const a = T * 0.075 + i * Math.PI * 2 / rays;
+                const len = R * (0.95 + 0.22 * Math.sin(T * 0.62 + i * 1.7));
+                const th = R * 0.14;
+                ctx.save();
+                ctx.translate(cx, cy);
+                ctx.rotate(a);
+                ctx.globalAlpha = (mono ? 0.30 : 0.42) * (0.45 + 0.55 * pulse) * (0.6 + 0.4 * Math.sin(T * 0.35 + i));
+                ctx.drawImage(SP.ray, 0, -th / 2, len, th);
+                ctx.restore();
+              }
+
+              /* 外层柔光 / 内层高热 / 品红镶边 */
+              const hue = mono || 'CY';
+              const d1 = R * 1.02 * breathe;
+              ctx.globalAlpha = (0.30 + 0.34 * pulse);
+              ctx.drawImage(SP.core[hue], cx - d1 / 2, cy - d1 / 2, d1, d1);
+
+              const d2 = R * 0.30 * breathe;
+              ctx.globalAlpha = (0.42 + 0.40 * pulse);
+              ctx.drawImage(SP.core[hue], cx - d2 / 2, cy - d2 / 2, d2, d2);
+
+              const d3 = R * 0.13 * (1 + 0.05 * Math.sin(T * 1.6));
+              ctx.globalAlpha = (0.55 + 0.40 * pulse);
+              ctx.drawImage(SP.hot, cx - d3 / 2, cy - d3 / 2, d3, d3);
+
+              if (!mono) {
+                const d4 = R * 0.52;
+                ctx.globalAlpha = 0.14 + 0.12 * pulse;
+                ctx.drawImage(SP.core.MG, cx - d4 * 0.54, cy - d4 * 0.54, d4, d4);
+                ctx.globalAlpha = 0.16 + 0.12 * pulse;
+                ctx.drawImage(SP.core.BL, cx + d4 * 0.18, cy + d4 * 0.16, d4 * 0.9, d4 * 0.9);
+              }
+
+              ctx.globalAlpha = 1;
+              ctx.globalCompositeOperation = 'source-over';
+            }
+
+            function drawLensFlare() {
+              const cx = W * 0.5, cy = H * 0.5;
+              const pulse = 0.5 + 0.5 * Math.sin(T * 0.55);
+              const R = Rm * 0.5;
+              ctx.globalCompositeOperation = 'lighter';
+
+              /* 横向长光斑 */
+              ctx.globalAlpha = 0.30 + 0.22 * pulse;
+              ctx.drawImage(SP.flare, cx - W * 0.46, cy - Rm * 0.045, W * 0.92, Rm * 0.09);
+              /* 垂直短光斑 */
+              ctx.save();
+              ctx.translate(cx, cy);
+              ctx.rotate(Math.PI / 2);
+              ctx.globalAlpha = 0.16 + 0.12 * pulse;
+              ctx.drawImage(SP.flare, -Rm * 0.28, -Rm * 0.020, Rm * 0.56, Rm * 0.04);
+              ctx.restore();
+              /* 光斑鬼影 */
+              const ghost = [
+                { k: -0.62, s: 0.085, h: 'BL', a: 0.20 },
+                { k: 0.55, s: 0.055, h: 'CY', a: 0.22 },
+                { k: 0.92, s: 0.105, h: 'MG', a: 0.13 }
+              ];
+              ghost.forEach(function (gh) {
+                const d = Rm * gh.s;
+                const gx = cx + W * 0.5 * gh.k - d / 2;
+                ctx.globalAlpha = gh.a * (0.6 + 0.4 * pulse);
+                ctx.drawImage(SP.core[gh.h], gx, cy - d / 2, d, d);
+              });
+              /* 十字星芒 */
+              ctx.globalAlpha = 0.22 + 0.20 * pulse;
+              ctx.strokeStyle = 'rgba(215, 255, 255, 0.55)';
+              ctx.lineWidth = 1.4;
+              const L = R * 0.62;
+              ctx.beginPath(); ctx.moveTo(cx - L, cy); ctx.lineTo(cx + L, cy); ctx.stroke();
+              ctx.beginPath(); ctx.moveTo(cx, cy - L * 0.42); ctx.lineTo(cx, cy + L * 0.42); ctx.stroke();
+
+              ctx.globalAlpha = 1;
+              ctx.globalCompositeOperation = 'source-over';
+            }
+
+            /* 能量脉冲：由核心向外扩散的细环 */
+            function drawIris() {
+              const cx = W * 0.5, cy = H * 0.5;
+              const R = Rm * 0.5;
+              const period = 3.4;
+              const t = (T % period) / period;
+              const r = R * (0.16 + 0.80 * t);
+              const a = (1 - t) * (1 - t) * 0.34;
+              ctx.globalCompositeOperation = 'lighter';
+              ctx.strokeStyle = 'rgba(' + HUES.CY + ', ' + a + ')';
+              ctx.lineWidth = 2;
+              ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.stroke();
+              ctx.globalAlpha = a * 1.2;
+              ctx.drawImage(SP.glow.CY, cx - r * 1.6, cy - r, r * 3.2, r * 2);
+              ctx.globalAlpha = 1;
+              ctx.globalCompositeOperation = 'source-over';
+            }
+
+            /* ============================================================
+               九、数据流粒子：上浮 + 闪烁 + 被核心吸引涡旋
+               ============================================================ */
+            function layoutParticles() {
+              parts = [];
+              let n = Math.round(Math.max(40, Math.min(110, W * H / 16000)));
+              if (LOWP) n = Math.round(n * 0.62);
+              for (let i = 0; i < n; i++) parts.push(newParticle());
+            }
+
+            function newParticle() {
+              /* 在画面内均匀取点，但避开核心附近，避免粒子"贴脸"重生 */
+              let x = 0, y = 0, guard = 0;
+              do {
+                x = Math.random() * W;
+                y = Math.random() * H;
+                guard++;
+              } while (Math.hypot(x - W * 0.5, y - H * 0.5) < Rm * 0.20 && guard < 12);
+              const rnd = Math.random();
+              return {
+                x: x,
+                y: y,
+                vx: rand(-6, 6),
+                vy: rand(-22, -6),
+                r: rand(0.8, 2.6),
+                hue: rnd < 0.68 ? 'CY' : (rnd < 0.88 ? 'BL' : 'MG'),
+                a: rand(0.16, 0.55),
+                ph: rand(0, Math.PI * 2),
+                sp: rand(0.6, 2.1)
+              };
+            }
+
+            function drawParticles(dt) {
+              const cx = W * 0.5, cy = H * 0.5;
+              ctx.globalCompositeOperation = 'lighter';
+              for (let i = 0; i < parts.length; i++) {
+                const p = parts[i];
+                const dx = cx - p.x, dy = cy - p.y;
+                const d = Math.hypot(dx, dy) + 0.001;
+                const nx = dx / d, ny = dy / d;
+                /* 朝向核心的引力（越近越强） */
+                const pull = 26 * (0.35 + 0.65 * (1 - Math.min(1, d / (Rm * 0.7))));
+                p.vx += nx * pull * dt;
+                p.vy += ny * pull * dt;
+                /* 切向涡旋，形成环绕核心的螺旋 */
+                p.vx += -ny * 15 * dt;
+                p.vy += nx * 15 * dt;
+                /* 基础上浮 + 阻尼 */
+                p.vy -= 7 * dt;
+                p.vx *= (1 - 0.55 * dt);
+                p.vy *= (1 - 0.55 * dt);
+                p.x += p.vx * dt;
+                p.y += p.vy * dt;
+
+                /* 被核心吞噬后从外围重生，形成持续循环 */
+                if (d < Rm * 0.055 || p.y < -40 || p.y > H + 40 || p.x < -40 || p.x > W + 40) {
+                  parts[i] = newParticle();
+                  continue;
+                }
+
+                const flick = Math.max(0, 0.35 + 0.65 * Math.sin(T * p.sp + p.ph));
+                const size = p.r * 7;
+                /* 拖尾（动态模糊） */
+                ctx.globalAlpha = p.a * flick * 0.35;
+                ctx.drawImage(SP.glow[p.hue], p.x - p.vx * 0.05 - size / 2, p.y - p.vy * 0.05 - size / 2, size, size);
+                ctx.globalAlpha = p.a * flick;
+                ctx.drawImage(SP.glow[p.hue], p.x - size / 2, p.y - size / 2, size, size);
+              }
+              ctx.globalAlpha = 1;
+              ctx.globalCompositeOperation = 'source-over';
+            }
+
+            /* ============================================================
+               十、扫描线上下移动
+               ============================================================ */
+            function drawScanline() {
+              const pos = 0.5 - 0.5 * Math.cos(T * 0.34);       /* 0→1→0 往返 */
+              const bandH = Math.max(60, H * 0.16);
+              const y = pos * (H + bandH) - bandH;
+              ctx.globalCompositeOperation = 'lighter';
+              ctx.globalAlpha = 0.5;
+              ctx.drawImage(SP.band, 0, y, W, bandH);
+              /* 亮芯 */
+              ctx.globalAlpha = 0.34;
+              ctx.fillStyle = 'rgba(190, 250, 255, 0.30)';
+              ctx.fillRect(0, y + bandH * 0.5 - 1, W, 1.6);
+
+              /* 第二条更慢的副扫描线 */
+              const pos2 = 0.5 - 0.5 * Math.cos(T * 0.17 + 1.9);
+              const y2 = pos2 * (H + bandH * 0.6) - bandH * 0.6;
+              ctx.globalAlpha = 0.22;
+              ctx.drawImage(SP.band, 0, y2, W, bandH * 0.6);
+              ctx.globalAlpha = 1;
+              ctx.globalCompositeOperation = 'source-over';
+            }
+
+            /* ============================================================
+               十一、故障艺术：RGB 分离 + 横向撕裂
+               ============================================================ */
+            function updateGlitch(dt) {
+              if (glitchLeft > 0) {
+                glitchLeft -= dt;
+                return;
+              }
+              glitchNext -= dt;
+              if (glitchNext <= 0) {
+                glitchLeft = 0.10 + Math.random() * 0.26;
+                glitchNext = 1.2 + Math.random() * 2.8;
+              }
+            }
+
+            function drawGlitchSlice() {
+              if (glitchLeft <= 0 || !staticLayer) return;
+              const slices = 1 + Math.floor(Math.random() * 3);
+              for (let i = 0; i < slices; i++) {
+                const sy = Math.random() * H * 0.9;
+                const sh = 6 + Math.random() * Math.min(60, H * 0.06);
+                const dx = (Math.random() < 0.5 ? -1 : 1) * (3 + Math.random() * 12);
+                ctx.drawImage(
+                  staticLayer,
+                  0, Math.round(sy * DPR), Math.round(W * DPR), Math.round(sh * DPR),
+                  dx, sy, W, sh
+                );
+              }
+            }
+
+            function drawTearBars() {
+              if (glitchLeft <= 0) return;
+              const n = 1 + Math.floor(Math.random() * 3);
+              ctx.globalCompositeOperation = 'lighter';
+              for (let i = 0; i < n; i++) {
+                const y = Math.random() * H;
+                const h = 1 + Math.random() * 3.5;
+                const x = Math.random() * W * 0.5;
+                const w = W * (0.16 + Math.random() * 0.5);
+                const hue = Math.random() < 0.6 ? HUES.CY : HUES.MG;
+                ctx.fillStyle = 'rgba(' + hue + ', 0.24)';
+                ctx.fillRect(x, y, w, h);
+                ctx.fillStyle = 'rgba(230, 255, 255, 0.34)';
+                ctx.fillRect(x + rand(-40, 40), y, Math.min(w, W - x), Math.max(0.9, h * 0.4));
+              }
+              ctx.globalAlpha = 1;
+              ctx.globalCompositeOperation = 'source-over';
+            }
+
+            /* ============================================================
+               十二、主循环
+               ============================================================ */
+            function render(dt) {
+              ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+              ctx.globalAlpha = 1;
+              ctx.globalCompositeOperation = 'source-over';
+
+              /* 深空底 */
+              ctx.fillStyle = '#01030a';
+              ctx.fillRect(0, 0, W, H);
+              const bg = ctx.createRadialGradient(W * 0.5, H * 0.5, 0, W * 0.5, H * 0.5, Math.max(W, H) * 0.72);
+              bg.addColorStop(0, 'rgba(8, 26, 46, 0.85)');
+              bg.addColorStop(0.45, 'rgba(4, 12, 24, 0.55)');
+              bg.addColorStop(1, 'rgba(1, 3, 10, 0)');
+              ctx.fillStyle = bg;
+              ctx.fillRect(0, 0, W, H);
+
+              drawClouds();
+
+              /* 静态层：电路 / HUD / 回纹边框 / 扫描线纹理 */
+              ctx.drawImage(staticLayer, 0, 0, W, H);
+              drawGlitchSlice();
+
+              drawPulses(dt);
+              drawRain(dt);
+
+              /* 故障时为核心与环加 RGB 三通道分离 */
+              if (glitchLeft > 0) {
+                const dx = 2 + Math.random() * 5;
+                ctx.save();
+                ctx.globalCompositeOperation = 'lighter';
+                ctx.globalAlpha = 0.55;
+                ctx.translate(-dx, 0);
+                drawRings('RD', dt);
+                drawCoreGlow('RD');
+                ctx.translate(dx * 2, 0);
+                drawRings('BL', dt);
+                drawCoreGlow('BL');
+                ctx.restore();
+              }
+
+              drawRings(null, dt);
+              drawIris();
+              drawCoreGlow(null);
+              drawLensFlare();
+              drawParticles(dt);
+
+              drawTearBars();
+              drawScanline();
+
+              /* 暗角 */
+              ctx.drawImage(vigLayer, 0, 0, W, H);
+            }
+
+            function loop(now) {
+              const dt = Math.min(0.05, (now - last) / 1000);
+              last = now;
+              T += dt;
+              updateGlitch(dt);
+              render(dt);
+              requestAnimationFrame(loop);
+            }
+
+            /* ============================================================
+               十三、初始化与自适应（竖屏 / 横屏同一套构图）
+               ============================================================ */
+            function resize() {
+              LOWP = (navigator.hardwareConcurrency || 4) <= 4;
+              DPR = Math.min(window.devicePixelRatio || 1, 1.75);
+              if (LOWP) DPR = Math.min(DPR, 1.25);
+              W = window.innerWidth;
+              H = window.innerHeight;
+              Rm = Math.min(W, H);
+              if (W * H * DPR * DPR > 3.2e6) LOWP = true;
+
+              cvs.width = Math.round(W * DPR);
+              cvs.height = Math.round(H * DPR);
+              ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+
+              buildStatic();
+              buildVignette();
+              layoutClouds();
+              layoutRain();
+              layoutParticles();
+              layoutPulses();
+            }
+
+            let rt = null;
+            window.addEventListener('resize', function () {
+              clearTimeout(rt);
+              rt = setTimeout(function () {
+                resize();
+                if (REDUCED) render(0);
+              }, 160);
+            });
+            window.addEventListener('orientationchange', function () {
+              clearTimeout(rt);
+              rt = setTimeout(function () { resize(); if (REDUCED) render(0); }, 260);
+            });
+
+            buildSprites();
+            resize();
+
+            if (REDUCED) {
+              /* 尊重"减少动态效果"：只绘制一帧静态画面 */
+              T = 1.2;
+              render(0);
+            } else {
+              requestAnimationFrame(function (t) { last = t; loop(t); });
+            }
         })();
     </script>
 </body>
